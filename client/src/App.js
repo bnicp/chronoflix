@@ -10,6 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import Navbar from "./components/Navbar";
 import "semantic-ui-css/semantic.min.css";
 import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -40,6 +41,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignupForm />} />
             <Route
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
