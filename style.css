@@ -1,0 +1,86 @@
+:root {
+  --dark-blue: #180032;
+  --yellow: #fcb42c;
+  --orange: #fe6c2b;
+  --pink: #de077d;
+  --purple: #6a0ba8;
+  --light-blue: #2786eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+html {
+  height: 100%;
+  font-size: 62.5%;
+  text-align: center;
+}
+
+body {
+  min-height: 100%;
+  font-size: 1.75rem;
+  line-height: 1.5;
+  background-color: var(--dark-blue);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+}
+
+main {
+  padding-top: 3rem;
+}
+
+#cf {
+  max-width: 50%;
+}
+
+.button {
+  width: 40%;
+  height: 15%;
+}
+
+.selection {
+  margin: 4rem 0;
+}
+
+#orange-overwrite {
+  background-color: var(--dark-blue);
+  color: var(--orange);
+  border: 3px solid var(--orange);
+}
+
+#yellow-overwrite {
+  background-color: var(--dark-blue);
+  color: var(--yellow);
+  border: 3px solid var(--yellow);
+}
+
+#pink-overwrite {
+  background-color: var(--dark-blue);
+  color: var(--pink);
+  border: 3px solid var(--pink);
+}
+
+#orange-overwrite:hover {
+  background-color: var(--orange);
+  color: white;
+}
+
+#yellow-overwrite:hover {
+  background-color: var(--yellow);
+  color: white;
+}
+
+#pink-overwrite:hover {
+  background-color: var(--pink);
+  color: white;
+}
