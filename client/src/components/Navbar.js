@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Menu, Segment } from "semantic-ui-react";
 
 export default class Navbar extends Component {
-  state = { activeItem: "home" };
+  state = { activeItem: "login" };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+  };
 
   render() {
     const { activeItem } = this.state;
@@ -13,18 +15,18 @@ export default class Navbar extends Component {
       <Segment inverted>
         <Menu inverted pointing secondary>
           <Menu.Item
-            name="home"
-            active={activeItem === "home"}
+            name="new game"
+            active={activeItem === "new game"}
             onClick={this.handleItemClick}
           />
           <Menu.Item
-            name="messages"
-            active={activeItem === "messages"}
+            name="login"
+            active={activeItem === "login"}
             onClick={this.handleItemClick}
           />
           <Menu.Item
-            name="friends"
-            active={activeItem === "friends"}
+            name="high scores"
+            active={activeItem === "high scores"}
             onClick={this.handleItemClick}
           />
         </Menu>
