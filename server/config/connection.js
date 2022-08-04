@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/chronoflix", {
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/chronoflix`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

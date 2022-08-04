@@ -43,18 +43,16 @@ const resolvers = {
       return updatedUser;
     },
     deleteBook: async (parent, { bookId }, context) => {
-      console.log(context.user._id);
       const updatedUser = await User.findOneAndUpdate(
         { _id: context.user._id },
         { $pull: { savedBooks: { bookId: bookId } } },
         { new: true }
       );
 
-      console.log(updatedUser);
       if (!updatedUser) {
         return "Couldn't find user with this id!";
       }
-      console.log(updatedUser);
+
       return updatedUser;
     },
   },
