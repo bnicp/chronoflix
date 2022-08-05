@@ -6,19 +6,6 @@ export default class Navbar extends Component {
   state = { activeItem: "home" };
 
   handleItemClick = (e, { name }) => {
-    switch (name) {
-      case "login":
-        // res.redirect("/login");
-        break;
-      case "sign up":
-        // res.redirect("/signup");
-        break;
-      case "new game":
-        // res.redirect("/signup");
-        break;
-      default:
-      // res.redirect("/newgame");
-    }
     this.setState({ activeItem: name });
   };
 
