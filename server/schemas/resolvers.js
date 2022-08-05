@@ -1,59 +1,82 @@
-const { User } = require("../models");
-const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require('apollo-server-express');
+const { User, Highscores, Score } = require('../models');
+const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
-      return User.findOne({
-        $or: [{ _id: context.user._id }, { username: context.user.username }],
-      });
-    },
-  },
-  Mutation: {
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
-      if (!user) {
-        return "Something is wrong!";
+      if (context.user) {
+        const userData = await User.findOne({ _id: context.user._id }).select('-__v -password');
+        return userData;
       }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    allUsers: async (parent, args) => {
+      
+        const highscoreData = await User.find({});
+        return highscoreData
+      
+    },
+    highscores: async (parent, args) => {
+      const highscoreData = await Score.find({}).sort([['score', 'descending']]);
+        return highscoreData
+    },
+
+    // med_highscores: async (parent, args) => {
+    //   const highscoreData = await Score.find({ difficulty: "medium" }).sort([['score', 'descending']]);
+    //     return highscoreData
+    // },
+
+    // hard_highscores: async (parent, args) => {
+    //   const highscoreData = await Score.find({ difficulty: "hard" }).sort([['score', 'descending']]);
+    //     return highscoreData
+    // }
+  },
+
+  Mutation: {
+    addUser: async (parent, args) => {
+      const user = await User.create(args);
       const token = signToken(user);
       return { token, user };
     },
-    loginUser: async (parent, { email, password }) => {
-      const user = await User.findOne({
-        $or: [{ email: email }, { password: password }],
-      });
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+
       if (!user) {
-        return "Can't find this user";
+        throw new AuthenticationError('No user found');
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        return "Wrong password!";
+        throw new AuthenticationError('Incorrect credentials');
       }
+
       const token = signToken(user);
+
       return { token, user };
     },
-    saveBook: async (parent, { bookToSave }, context) => {
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id },
-        { $addToSet: { savedBooks: bookToSave } },
-        { new: true, runValidators: true }
-      );
-      return updatedUser;
-    },
-    deleteBook: async (parent, { bookId }, context) => {
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id },
-        { $pull: { savedBooks: { bookId: bookId } } },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        return "Couldn't find user with this id!";
+    saveBook: async (parent, { newBook }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $push: { savedBooks: newBook }},
+          { new: true }
+        );
+        return updatedUser;
       }
-
-      return updatedUser;
+      throw new AuthenticationError('You need to be logged in!');
+    },
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId }}},
+          { new: true }
+        );
+        return updatedUser;
+      }
+      throw new AuthenticationError('You need to be logged in!');
     },
   },
 };
