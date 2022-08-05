@@ -9,10 +9,10 @@ const scoreSchema = new Schema({
         type: Number,
         required: true
     },
-    difficulty: {
-        type: String,
-        required: true
-    }
+    // difficulty: {
+    //     type: String,
+    //     required: true
+    // }
 });
 
 const Score = model('Score', scoreSchema);
