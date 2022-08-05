@@ -44,26 +44,35 @@ html {
   font-size: 1.75rem;
   line-height: 1.5;
   background-color: var(--dark-blue);
-  min-height: 100vh;
+}
+
+body {
+  background-color: var(--dark-blue);
+  color: white;
 }
 
 main {
   padding-top: 3rem;
 }
 
-#cf {
-  max-width: 50%;
+/* logo on home */
+.logo {
+  max-width: 60%;
+  transform: translate(30%, 0%);
 }
 
-.button {
-  width: 40%;
+/* new game screen */
+.button,
+button {
+  width: 55%;
   height: 15%;
 }
 
-.selection {
-  margin: 4rem 0;
+.make-selection {
+  margin: 3rem 0;
 }
 
+/* overwriting semantic UI button styles */
 #orange-overwrite {
   background-color: var(--dark-blue);
   color: var(--orange);
@@ -97,19 +106,36 @@ main {
   color: white;
 }
 
+/* game screen */
 #game-screen {
   max-width: 80%;
   transform: translate(10%, 10%);
 }
 
-#instruction {
+#instructions {
   margin-bottom: 4rem;
+  color: white;
 }
 
-.movie {
+.movie-poster {
   width: 80%;
 }
 
-.movies {
+.movies-container {
   margin-bottom: 4rem;
 }
+
+.timer {
+  margin-bottom: 4rem;
+}
+
+#submit-button {
+  background-color: var(--orange);
+  color: white;
+  border: 3px solid var(--orange);
+  border-radius: 0.25rem;
+  padding: 2rem 0;
+  font-size: 2rem;
+}
+
+/* high score screen */

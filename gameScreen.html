@@ -12,28 +12,32 @@
 
     <main>
       <section id="game-screen">
-        <div id="instruction">
-          Click the images to place the movies in order by release year.
+        <div id="instructions">
+          Click the poster images to place the movies in order by release year.
         </div>
         <div class="ui three column grid">
-          <div class="column movies">
+          <div class="column movies-container">
             <div class="ui segment">
-              <img src="./client/src/assets/army.jpg" class="movie" />
+              <img src="./client/src/assets/army.jpg" class="movie-poster" />
             </div>
           </div>
           <div class="column">
             <div class="ui segment">
-              <img src="./client/src/assets/hamilton.jpeg" class="movie" />
+              <img
+                src="./client/src/assets/hamilton.jpeg"
+                class="movie-poster"
+              />
             </div>
           </div>
           <div class="column">
             <div class="ui segment">
-              <img src="./client/src/assets/titanic.jpg" class="movie" />
+              <img src="./client/src/assets/titanic.jpg" class="movie-poster" />
             </div>
           </div>
         </div>
+        <div class="timer">TIMER BLOCK</div>
         <div className="selection">
-          <button className="massive ui button" id="pink-overwrite">
+          <button className="massive ui button" id="submit-button">
             SUBMIT
           </button>
         </div>
