@@ -7,6 +7,11 @@
   --light-blue: #2786eb;
 }
 
+.ui.secondary.pointing.menu,
+.ui.segment:first-child {
+  background: var(--light-blue);
+}
+
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
