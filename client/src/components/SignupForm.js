@@ -1,70 +1,100 @@
-// import React, { useState } from "react";
-import React from "react";
-// import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
+// import React from "react";
+import { useMutation } from "@apollo/client";
 // import { Form, Button, Alert } from "react-bootstrap";
 import { Button, Form } from "semantic-ui-react";
-// import { ADD_USER } from "../utils/mutations";
-// import Auth from "../utils/auth";
+import { ADD_USER } from "../utils/mutations";
+import Auth from "../utils/auth";
 
 const SignupForm = () => {
   // set initial form state
-  // const [userFormData, setUserFormData] = useState({
-  //   username: "",
-  //   email: "",
-  //   password: "",
-  // });
-  // // set state for form validation
-  // const [validated] = useState(false);
-  // // set state for alert
-  // const [showAlert, setShowAlert] = useState(false);
-  // const [addUser, { error }] = useMutation(ADD_USER);
+  const [userFormData, setUserFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  // set state for form validation
+  const [validated] = useState(false);
+  // set state for alert
+  const [showAlert, setShowAlert] = useState(false);
+  const [addUser, { error }] = useMutation(ADD_USER);
 
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setUserFormData({ ...userFormData, [name]: value });
-  // };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserFormData({ ...userFormData, [name]: value });
+  };
 
   const handleFormSubmit = async (event) => {
-    // event.preventDefault();
-    // // check if form has everything (as per react-bootstrap docs)
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    // }
-    // try {
-    //   const response = await addUser({ variables: { ...userFormData } });
-    //   if (!response.data.addUser) {
-    //     throw new Error("something went wrong!");
-    //   }
-    //   const { token, user } = response.data.addUser;
-    //   Auth.login(token);
-    // } catch (err) {
-    //   console.error(err);
-    //   setShowAlert(true);
-    // }
-    // setUserFormData({
-    //   username: "",
-    //   email: "",
-    //   password: "",
-    // });
+    event.preventDefault();
+    // check if form has everything (as per react-bootstrap docs)
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    try {
+      const response = await addUser({ variables: { ...userFormData } });
+      if (!response.data.addUser) {
+        throw new Error("something went wrong!");
+      }
+      const { token, user } = response.data.addUser;
+      Auth.login(token);
+    } catch (err) {
+      console.error(err);
+      setShowAlert(true);
+    }
+    setUserFormData({
+      username: "",
+      email: "",
+      password: "",
+    });
   };
 
   return (
-    <Form>
+    <Form onSubmit={handleFormSubmit}>
       <Form.Field>
         <label>Email</label>
-        <input placeholder="Email" />
+        <input 
+          placeholder="Email" 
+          type="email"
+          name="email"
+          onChange={handleInputChange}
+          value={userFormData.email}
+          required 
+        />
       </Form.Field>
       <Form.Field>
         <label>Username</label>
-        <input placeholder="Username" />
+        <input 
+          type="text"
+          placeholder="Username"
+          name="username"
+          onChange={handleInputChange}
+          value={userFormData.username}
+          required
+          />
       </Form.Field>
       <Form.Field>
         <label>Password</label>
-        <input placeholder="Password" />
+        <input 
+          placeholder="Password" 
+          type="password"
+          name="password"
+          onChange={handleInputChange}
+          value={userFormData.password}
+          />
       </Form.Field>
-      <Button inverted color="red">
+      <Button 
+        inverted color="red"
+        type="submit"
+        disabled={
+          !(
+            userFormData.username &&
+            userFormData.email &&
+            userFormData.password
+          )
+        }
+        >
         Submit
       </Button>
     </Form>
