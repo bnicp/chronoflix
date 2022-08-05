@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- ... other HTML ... -->
+
+    <main>
+      <section class="logo">
+        <img src="./client/public/cf_logo.png" id="cf" />
+      </section>
+      <section class="new-game">
+        <div class="selection">
+          <button class="massive ui button" id="orange-overwrite">
+            NEW GAME
+          </button>
+        </div>
+        <div class="selection">
+          <button class="massive ui button" id="yellow-overwrite">
+            DIFFICULTY
+          </button>
+        </div>
+        <div class="selection">
+          <button class="massive ui button" id="pink-overwrite">
+            HIGH SCORES
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- ... Load React ... -->
+    <link
+      async
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
+    <link rel="stylesheet" href="./client/src/index.css" />
+
+    <!-- Load our React component. -->
+    <script src="like_button.js"></script>
+  </body>
+</html>
