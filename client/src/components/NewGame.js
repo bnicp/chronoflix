@@ -8,17 +8,17 @@ const NewGame = () => (
       <Image src={cf_logo} />
     </div>
     <div className="new-game">
-      <div className="selection">
+      <div className="make-selection">
         <Button className="massive ui button" id="orange-overwrite">
           NEW GAME
         </Button>
       </div>
-      <div className="selection">
+      <div className="make-selection">
         <Button className="massive ui button" id="yellow-overwrite">
           DIFFICULTY
         </Button>
       </div>
-      <div className="selection">
+      <div className="make-selection">
         <Button className="massive ui button" id="pink-overwrite">
           HIGH SCORES
         </Button>
