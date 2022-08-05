@@ -39,6 +39,7 @@ html {
   font-size: 1.75rem;
   line-height: 1.5;
   background-color: var(--dark-blue);
+  min-height: 100vh;
 }
 
 main {
@@ -89,4 +90,21 @@ main {
 #pink-overwrite:hover {
   background-color: var(--pink);
   color: white;
+}
+
+#game-screen {
+  max-width: 80%;
+  transform: translate(10%, 10%);
+}
+
+#instruction {
+  margin-bottom: 4rem;
+}
+
+.movie {
+  width: 80%;
+}
+
+.movies {
+  margin-bottom: 4rem;
 }
