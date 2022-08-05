@@ -44,10 +44,7 @@ function App() {
             <Route path="/newgame" element={<NewGame />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
-            <Route
-              path="*"
-              element={<h1 className="display-2">Wrong page!</h1>}
-            />
+            <Route path="*" element={<NewGame />} />
           </Routes>
         </>
       </Router>
