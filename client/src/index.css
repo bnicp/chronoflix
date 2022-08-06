@@ -146,3 +146,13 @@ button {
   font-size: 2rem;
   padding-bottom: 2rem;
 }
+
+#nav-logo {
+  position: absolute;
+  top: 1.5rem;
+  left: 2rem;
+}
+
+/* .twelve.wide.column {
+  float: right;
+} */
