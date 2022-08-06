@@ -13,6 +13,7 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Game from "./components/Game";
 import Home from "./components/Home";
+import HighScores from "./components/HighScores";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -45,6 +46,7 @@ function App() {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/game" element={<Game />} />
+            <Route path="/highscores" element={<HighScores />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </>

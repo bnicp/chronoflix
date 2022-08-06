@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, Image, Segment, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import army from "../assets/army.jpg";
 import _ from "lodash";
 
@@ -37,6 +38,8 @@ const Game = () => (
     <Button
       className="massive ui button"
       id="submit-button"
+      as={Link}
+      to="/highscores"
       style={{ marginBottom: "4rem" }}
     >
       SUBMIT
