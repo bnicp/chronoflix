@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import React from "react";
 import { useMutation } from "@apollo/client";
 // import { Form, Button, Alert } from "react-bootstrap";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, FormGroup } from "semantic-ui-react";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 
@@ -52,41 +52,55 @@ const SignupForm = () => {
 
   return (
     <Form onSubmit={handleFormSubmit}>
-      <Form.Field>
-        <label>Email</label>
-        <input 
-          placeholder="Email" 
-          type="email"
-          name="email"
-          onChange={handleInputChange}
-          value={userFormData.email}
-          required 
-        />
-      </Form.Field>
-      <Form.Field>
-        <label>Username</label>
-        <input 
-          type="text"
-          placeholder="Username"
-          name="username"
-          onChange={handleInputChange}
-          value={userFormData.username}
-          required
+      <Form.Group>
+        <Form.Field>
+          <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
+            Email
+          </label>
+          <input
+            placeholder="Email"
+            type="email"
+            name="email"
+            onChange={handleInputChange}
+            value={userFormData.email}
+            required
           />
-      </Form.Field>
-      <Form.Field>
-        <label>Password</label>
-        <input 
-          placeholder="Password" 
-          type="password"
-          name="password"
-          onChange={handleInputChange}
-          value={userFormData.password}
+        </Form.Field>
+      </Form.Group>
+      <Form.Group>
+        <Form.Field>
+          <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
+            Username
+          </label>
+          <input
+            type="text"
+            placeholder="Username"
+            name="username"
+            onChange={handleInputChange}
+            value={userFormData.username}
+            required
           />
-      </Form.Field>
-      <Button 
-        inverted color="red"
+        </Form.Field>
+      </Form.Group>
+      <Form.Group>
+        <Form.Field>
+          <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
+            Password
+          </label>
+          <input
+            placeholder="Password"
+            type="password"
+            name="password"
+            onChange={handleInputChange}
+            value={userFormData.password}
+          />
+        </Form.Field>
+      </Form.Group>
+      <Button
+        inverted
+        color="red"
         type="submit"
+        style={{ fontSize: "18px", marginTop: "1.5em", marginTop: "1.5em" }}
         disabled={
           !(
             userFormData.username &&
@@ -94,7 +108,7 @@ const SignupForm = () => {
             userFormData.password
           )
         }
-        >
+      >
         Submit
       </Button>
     </Form>
