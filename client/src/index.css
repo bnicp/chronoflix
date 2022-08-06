@@ -118,7 +118,14 @@ button {
 }
 
 .movie-poster {
-  width: 80%;
+  width: 100%;
+}
+
+#poster,
+#poster1,
+#poster2 {
+  background-color: var(--pink);
+  border-radius: 1rem;
 }
 
 .movies-container {
