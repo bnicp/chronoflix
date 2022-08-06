@@ -104,15 +104,8 @@ button {
   color: white;
 }
 
-/* game screen */
-#game-screen,
-#high-scores {
-  max-width: 80%;
-  transform: translate(10%, 10%);
-}
-
 #instructions {
-  margin-bottom: 4rem;
+  margin: 2rem 0 2rem 0;
   color: white;
 }
 
@@ -120,19 +113,13 @@ button {
   width: 100%;
 }
 
-#poster,
-#poster1,
-#poster2 {
-  background-color: var(--pink);
-  border-radius: 1rem;
-}
-
 .movies-container {
   margin-bottom: 4rem;
 }
 
 .timer {
-  margin-bottom: 4rem;
+  color: white;
+  margin-bottom: 3rem;
 }
 
 #submit-button {
