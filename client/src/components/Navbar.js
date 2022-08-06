@@ -29,20 +29,37 @@ export default class Navbar extends Component {
             active={activeItem === "home"}
             onClick={this.handleItemClick}
           />
-          <Menu.Item
-            as={Link}
-            to="/login"
-            name="login"
-            active={activeItem === "login"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
+          {AuthService.loggedIn() ? (
+            <>
+              <Menu.Item
+                as={Link}
+                to="/logout"
+                name="logout"
+                active={activeItem === "logout"}
+                onClick={AuthService.logout}
+              />
+            </>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to="/login"
+              name="login"
+              active={activeItem === "login"}
+              onClick={this.handleItemClick}
+            />
+          )}
+          {AuthService.loggedIn() ? (
+            <>
+            </>
+          ) : (
+            <Menu.Item
             as={Link}
             to="/signup"
             name="sign up"
             active={activeItem === "sign up"}
             onClick={this.handleItemClick}
           />
+          )}
         </Menu>
       </Segment>
     );
