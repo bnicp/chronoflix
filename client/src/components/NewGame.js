@@ -15,7 +15,7 @@ const NewGame = () => (
       </div>
       <div className="make-selection">
         <Button className="massive ui button" id="yellow-overwrite">
-          DIFFICULTY
+          HOW TO
         </Button>
       </div>
       <div className="make-selection">

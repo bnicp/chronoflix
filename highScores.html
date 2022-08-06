@@ -4,43 +4,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <title>Document</title>
   </head>
   <body>
     <!-- ... other HTML ... -->
 
     <main>
-      <section id="game-screen">
-        <div id="instructions">
-          Click the poster images to place the movies in order by release year.
+      <section id="high-scores">
+        <div class="heading">
+          <h1>HIGH SCORES</h1>
         </div>
-        <div class="ui three column grid">
-          <div class="column movies-container">
-            <div class="ui segment" id="poster">
-              <img src="./client/src/assets/army.jpg" class="movie-poster" />
-            </div>
-          </div>
-          <div class="column">
-            <div class="ui segment" id="poster1">
-              <img src="./client/src/assets/army.jpg" class="movie-poster" />
-            </div>
-          </div>
-          <div class="column">
-            <div class="ui segment" id="poster2">
-              <img src="./client/src/assets/army.jpg" class="movie-poster" />
-            </div>
-          </div>
+        <div class="universal-scores">
+          <img src="./client/src/assets/all_user_scores.png" id="all" />
         </div>
-        <div class="timer">TIMER BLOCK</div>
-        <div className="selection">
-          <button className="massive ui button" id="submit-button">
-            SUBMIT
+        <div class="current-user-scores">
+          <img src="./client/src/assets/current_user_scores.png" id="one" />
+        </div>
+        <div className="">
+          <button
+            className="massive ui button"
+            class="new-game"
+            id="pink-overwrite"
+          >
+            NEW GAME
           </button>
         </div>
       </section>

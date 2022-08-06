@@ -31,6 +31,7 @@
   padding: 0;
   box-sizing: border-box;
   justify-content: center;
+  font-family: "Press Start 2P", cursive !important;
 }
 
 html {
@@ -55,6 +56,10 @@ main {
   padding-top: 3rem;
 }
 
+h1 {
+  font-size: 3.5rem;
+}
+
 /* logo on home */
 .logo {
   max-width: 60%;
@@ -65,7 +70,6 @@ main {
 .button,
 button {
   width: 55%;
-  height: 15%;
 }
 
 .make-selection {
@@ -107,7 +111,8 @@ button {
 }
 
 /* game screen */
-#game-screen {
+#game-screen,
+#high-scores {
   max-width: 80%;
   transform: translate(10%, 10%);
 }
@@ -146,3 +151,18 @@ button {
 }
 
 /* high score screen */
+.heading {
+  margin-bottom: 4rem;
+}
+
+#all,
+#one {
+  max-width: 80%;
+}
+
+.new-game {
+  border-radius: 0.25rem;
+  padding: 2rem 0;
+  font-size: 2rem;
+  margin: 3rem 0;
+}
