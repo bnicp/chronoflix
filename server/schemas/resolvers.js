@@ -1,6 +1,6 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { User, Highscores, Score } = require('../models');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { User, Highscores, Score } = require("../models");
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -9,17 +9,17 @@ const resolvers = {
         const userData = await User.findOne({ _id: context.user._id });
         return userData;
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
     allUsers: async (parent, args) => {
-      
-        const highscoreData = await User.find({});
-        return highscoreData
-      
+      const highscoreData = await User.find({});
+      return highscoreData;
     },
     highscores: async (parent, args) => {
-      const highscoreData = await Score.find({}).sort([['score', 'descending']]);
-        return highscoreData
+      const highscoreData = await Score.find({}).sort([
+        ["score", "descending"],
+      ]);
+      return highscoreData;
     },
 
     // med_highscores: async (parent, args) => {
@@ -39,17 +39,17 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    login: async (parent, { email, password }) => {
+    loginUser: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError('No user found');
+        throw new AuthenticationError("No user found");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect credentials');
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const token = signToken(user);
