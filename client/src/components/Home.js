@@ -6,7 +6,7 @@ import cf_logo from "../assets/cf_logo.png";
 const NewGame = () => (
   <>
     <div className="logo">
-      <Image src={cf_logo} size="huge" centered />
+      <Image src={cf_logo} size="big" centered />
     </div>
     <div className="new-game">
       <div className="make-selection">

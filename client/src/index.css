@@ -63,7 +63,7 @@ h1 {
 /* new game screen */
 .button,
 button {
-  width: 55%;
+  width: 45%;
 }
 
 .make-selection {
@@ -151,6 +151,10 @@ button {
   position: absolute;
   top: 1.5rem;
   left: 2rem;
+}
+
+.logo {
+  margin-top: 4rem;
 }
 
 /* .twelve.wide.column {
