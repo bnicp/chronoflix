@@ -19,6 +19,7 @@
     "@apollo/client": "^3.6.9",
     "apollo-server-express": "^3.10.0",
     "dotenv": "^16.0.1",
-    "graphql": "^16.5.0"
+    "graphql": "^16.5.0",
+    "lodash": "^4.17.21"
   }
 }
