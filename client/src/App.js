@@ -11,7 +11,7 @@ import Navbar from "./components/Navbar";
 import "semantic-ui-css/semantic.min.css";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-import NewGame from "./components/NewGame";
+import Home from "./components/Home";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -41,10 +41,9 @@ function App() {
         <>
           <Navbar />
           <Routes>
-            <Route path="/newgame" element={<NewGame />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
-            <Route path="*" element={<NewGame />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </>
       </Router>
