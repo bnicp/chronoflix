@@ -3,7 +3,7 @@ import { Menu, Segment, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/cf_symbol.png";
 import words from "../assets/cf_words.png";
-import Auth from "../utils/auth";
+import AuthService from "../utils/auth";
 
 export default class Navbar extends Component {
   state = { activeItem: "home" };
@@ -29,20 +29,37 @@ export default class Navbar extends Component {
             active={activeItem === "new game"}
             onClick={this.handleItemClick}
           />
-          <Menu.Item
-            as={Link}
-            to="/login"
-            name="login"
-            active={activeItem === "login"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
+          {AuthService.loggedIn() ? (
+            <>
+              <Menu.Item
+                as={Link}
+                to="/logout"
+                name="logout"
+                active={activeItem === "logout"}
+                onClick={AuthService.logout}
+              />
+            </>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to="/login"
+              name="login"
+              active={activeItem === "login"}
+              onClick={this.handleItemClick}
+            />
+          )}
+          {AuthService.loggedIn() ? (
+            <>
+            </>
+          ) : (
+            <Menu.Item
             as={Link}
             to="/signup"
             name="sign up"
             active={activeItem === "sign up"}
             onClick={this.handleItemClick}
           />
+          )}
         </Menu>
       </Segment>
     );
