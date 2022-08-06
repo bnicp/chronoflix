@@ -19,7 +19,7 @@ export default class Navbar extends Component {
       <Segment>
         <div className="four wide column">
           {/* <Image src={logo} size="mini" style={{ display: "inline-block" }} /> */}
-          <Image src={words} size="small" style={{ display: "inline-block" }} />
+          <Image src={words} size="medium" id="nav-logo" style={{ display: "inline-block" }} />
         </div>
         <Menu pointing secondary className="twelve wide column">
           <Menu.Item
