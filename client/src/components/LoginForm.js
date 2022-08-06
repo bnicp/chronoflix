@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
-import Auth from '../utils/auth';
+import Auth from "../utils/auth";
 
 const LoginForm = () => {
-  const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+  const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   // const [validated] = useState(false);
   // const [showAlert, setShowAlert] = useState(false);
   const [loginUser, { error }] = useMutation(LOGIN_USER);
@@ -26,10 +26,10 @@ const LoginForm = () => {
     // }
 
     try {
-      const response = await loginUser({ variables:{...userFormData} });
+      const response = await loginUser({ variables: { ...userFormData } });
 
       if (!response.data.loginUser) {
-        throw new Error('something went wrong!');
+        throw new Error("something went wrong!");
       }
 
       const { token, user } = await response.data.loginUser;
@@ -41,49 +41,57 @@ const LoginForm = () => {
     }
 
     setUserFormData({
-      username: '',
-      email: '',
-      password: '',
+      username: "",
+      email: "",
+      password: "",
     });
   };
 
   return (
-
-    
-      <Form onSubmit={handleFormSubmit}>
+    <Form onSubmit={handleFormSubmit}>
+      <Form.Group>
         <Form.Field>
-          <label style={{ color: "white", fontSize: "20px" }}>Email</label>
+          <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
+            Email
+          </label>
           <input
-            type="text" 
-            placeholder="Email" 
-            id="email" 
-            name="email" 
+            type="text"
+            placeholder="Email"
+            id="email"
+            name="email"
             onChange={handleInputChange}
-            value={userFormData.email} 
-            required 
-            />
+            value={userFormData.email}
+            required
+          />
         </Form.Field>
+      </Form.Group>
+      <Form.Group>
         <Form.Field>
-          <label style={{ color: "white", fontSize: "20px" }}>Password</label>
+          <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
+            Password
+          </label>
           <input
-            type="password" 
-            placeholder="Password" 
+            type="password"
+            placeholder="Password"
             id="password"
             name="password"
             onChange={handleInputChange}
-            value={userFormData.password} 
-            required 
-            />
+            value={userFormData.password}
+            required
+          />
         </Form.Field>
-        <Button 
-          inverted color="red"
-          type="submit"
-          disabled={!(userFormData.email && userFormData.password)}
-          >
-          Submit
-        </Button>
-      </Form>
-    
+      </Form.Group>
+      <Button
+        inverted
+        color="red"
+        type="submit"
+        style={{ fontSize: "18px", marginTop: "1.5em" }}
+        disabled={!(userFormData.email && userFormData.password)}
+      >
+        Submit
+      </Button>
+    </Form>
+
     // <>
     //   <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
     //     {/* <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
@@ -126,7 +134,6 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
 
 // const LoginForm = () => (
 //   <Form>
