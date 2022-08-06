@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Image, Segment } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Button, Image } from "semantic-ui-react";
 import cf_logo from "../assets/cf_logo.png";
 
 const NewGame = () => (
@@ -9,7 +10,12 @@ const NewGame = () => (
     </div>
     <div className="new-game">
       <div className="make-selection">
-        <Button className="massive ui button" id="orange-overwrite">
+        <Button
+          className="massive ui button"
+          as={Link}
+          to="/game"
+          id="orange-overwrite"
+        >
           NEW GAME
         </Button>
       </div>
