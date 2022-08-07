@@ -6,6 +6,45 @@ import _ from "lodash";
 
 const movieNumber = 3;
 
+function generateRandomInteger(max) {
+  return Math.floor(Math.random() * max);
+}
+
+async function fetchMovies() {
+  const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=e11f09fb5ad40a4f8bb7c23b9db6229e&with_genres=27&page=2&language=en-US&primary_release_date.gte=2011&primary_release_date.lte=2020`);
+  const movies = await response.text();
+  const movieData = JSON.parse(movies);
+  console.log(movieData);
+
+  let movieArr = []
+  
+  do {
+      const addMovie = movieData.results[generateRandomInteger(19)];
+      if (movieArr.indexOf(addMovie) === -1) {
+          movieArr.push(addMovie)
+      } 
+  } while (movieArr.length < 6);
+
+  console.log(movieArr);
+
+  function compare( a, b ) {
+      if ( a.release_date < b.release_date ){
+        return -1;
+      }
+      if ( a.release_date > b.release_date ){
+        return 1;
+      }
+      return 0;
+    }
+  
+  let answerKey = movieArr.map(a => {return {...a}})
+  answerKey = answerKey.sort(compare);
+  console.log(answerKey);
+  
+}
+
+window.onLoad= fetchMovies();
+
 const posters = _.times(movieNumber, (i) => (
   <Grid.Column key={i} max={movieNumber} style={{ margin: "1rem 0 1rem 0" }}>
     <Segment
