@@ -3,7 +3,6 @@ import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import army from "../assets/army.jpg";
 import _ from "lodash";
-require("dotenv").config();
 
 const movieNumber = 3;
 
@@ -13,7 +12,7 @@ function generateRandomInteger(max) {
 
 async function fetchMovies() {
   const response = await fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&with_genres=27&page=2&language=en-US&primary_release_date.gte=2011&primary_release_date.lte=2020`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&with_genres=27&page=2&language=en-US&primary_release_date.gte=2011&primary_release_date.lte=2020`
   );
   const movies = await response.text();
   const movieData = JSON.parse(movies);
@@ -47,7 +46,7 @@ async function fetchMovies() {
   console.log(answerKey);
 }
 
-window.onLoad = fetchMovies();
+// fetchMovies();
 
 const posters = _.times(movieNumber, (i) => (
   <Grid.Column key={i} max={movieNumber} style={{ margin: "1rem 0 1rem 0" }}>

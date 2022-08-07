@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-// import React from "react";
 import { useMutation } from "@apollo/client";
-// import { Form, Button, Alert } from "react-bootstrap";
 import { Button, Form, FormGroup } from "semantic-ui-react";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -100,7 +98,7 @@ const SignupForm = () => {
         inverted
         color="red"
         type="submit"
-        style={{ fontSize: "18px", marginTop: "1.5em", marginTop: "1.5em" }}
+        style={{ fontSize: "18px", marginTop: "1.5em" }}
         disabled={
           !(
             userFormData.username &&
