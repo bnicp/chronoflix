@@ -1,92 +1,111 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import army from "../assets/army.jpg";
 import _ from "lodash";
+import { fetchMovies, generateRandomInteger } from "../utils/API";
+require("dotenv").config();
 
-const movieNumber = 3;
+const Game = () => {
+  const movieNumber = 3;
 
-function generateRandomInteger(max) {
-  return Math.floor(Math.random() * max);
-}
+  const [fetchedMovies, setFetchedMovies] = useState([]);
+  const [answerKey, setAnswerKey] = useState([]);
 
-async function fetchMovies() {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&with_genres=27&page=2&language=en-US&primary_release_date.gte=2011&primary_release_date.lte=2020`
-  );
-  const movies = await response.text();
-  const movieData = JSON.parse(movies);
-  console.log(movieData);
+  const handleStart = async (event) => {
+    event.preventDefault();
 
-  let movieArr = [];
+    try {
+      const response = await fetchMovies();
+      const movies = await response.json();
 
-  do {
-    const addMovie = movieData.results[generateRandomInteger(19)];
-    if (movieArr.indexOf(addMovie) === -1) {
-      movieArr.push(addMovie);
+      let movieArr = [];
+
+      do {
+        const addMovie = movies.results[generateRandomInteger(19)];
+        if (movieArr.indexOf(addMovie) === -1) {
+          movieArr.push(addMovie);
+        }
+      } while (movieArr.length < 6);
+
+      const movieData = movieArr.map((movie) => ({
+        movieId: movie.id,
+        title: movie.title,
+        release_date: movie.release_date,
+        image: movie.poster_path
+      }));
+      console.log(movieData)
+      setFetchedMovies(movieData);
+      // console.log(fetchedMovies);
+      function compare(a, b) {
+        if (a.release_date < b.release_date) {
+          return -1;
+        }
+        if (a.release_date > b.release_date) {
+          return 1;
+        }
+        return 0;
+      }
+  
+      let answerKey = movieData.map((a) => {
+        return { ...a };
+      });
+      answerKey = answerKey.sort(compare);
+      console.log(answerKey);
+      setAnswerKey(answerKey);
+    } catch (err) {
+      console.error(err)
     }
-  } while (movieArr.length < 6);
+  };
 
-  console.log(movieArr);
+  const posters = _.times(fetchedMovies.length, (i) => (
+    <Grid.Column key={i} max={fetchedMovies.length} style={{ margin: "1rem 0 1rem 0" }}>
+      <Segment
+        id={`poster${i}`}
+        style={{ backgroundColor: "#de077d", borderRadius: "1rem" }}
+      >
+        <Image
+          style={{ borderRadius: "1rem" }}
+          src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          alt={`${fetchedMovies[i].title}`}
+          className="movie-poster"
+        />
+      </Segment>
+    </Grid.Column>
+  ));
 
-  function compare(a, b) {
-    if (a.release_date < b.release_date) {
-      return -1;
-    }
-    if (a.release_date > b.release_date) {
-      return 1;
-    }
-    return 0;
-  }
+  return (
+    <div id="game-screen">
+      <div id="instructions">
+        Click the poster images to place the movies in order by release year.
+      </div>
+      <Grid centered style={{ marginBottom: "4rem" }}>
+        <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
+          {posters}
+        </Grid.Row>
+        <Grid.Row columns={movieNumber * 2} only="computer">
+          {posters}
+        </Grid.Row>
+      </Grid>
+      <div className="timer">TIME LEFT: </div>
+      <Button
+        className="massive ui button"
+        id="start-button"
+        onClick={handleStart}>
+        START
+      </Button>
 
-  let answerKey = movieArr.map((a) => {
-    return { ...a };
-  });
-  answerKey = answerKey.sort(compare);
-  console.log(answerKey);
-}
-
-// fetchMovies();
-
-const posters = _.times(movieNumber, (i) => (
-  <Grid.Column key={i} max={movieNumber} style={{ margin: "1rem 0 1rem 0" }}>
-    <Segment
-      id={`poster${i}`}
-      style={{ backgroundColor: "#de077d", borderRadius: "1rem" }}
-    >
-      <Image
-        style={{ borderRadius: "1rem" }}
-        src={army}
-        className="movie-poster"
-      />
-    </Segment>
-  </Grid.Column>
-));
-
-const Game = () => (
-  <div id="game-screen">
-    <div id="instructions">
-      Click the poster images to place the movies in order by release year.
+      <Button
+        className="massive ui button"
+        id="submit-button"
+        as={Link}
+        to="/highscores"
+        style={{ marginBottom: "4rem" }}
+      >
+        SUBMIT
+      </Button>
     </div>
-    <Grid centered style={{ marginBottom: "4rem" }}>
-      <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
-        {posters}
-      </Grid.Row>
-      <Grid.Row columns={movieNumber * 2} only="computer">
-        {posters}
-      </Grid.Row>
-    </Grid>
-    <div className="timer">TIME LEFT: </div>
-    <Button
-      className="massive ui button"
-      id="submit-button"
-      as={Link}
-      to="/highscores"
-      style={{ marginBottom: "4rem" }}
-    >
-      SUBMIT
-    </Button>
-  </div>
-);
+  );
+};
 
 export default Game;
