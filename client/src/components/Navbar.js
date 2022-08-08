@@ -22,6 +22,8 @@ export default class Navbar extends Component {
             src={words}
             size="medium"
             id="nav-logo"
+            as={Link}
+            to="*"
             style={{ display: "inline-block" }}
           />
         </div>
