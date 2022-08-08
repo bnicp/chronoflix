@@ -20,8 +20,11 @@ const NewGame = () => (
         </Button>
       </div>
       <div className="make-selection">
-        <Button className="massive ui button" id="yellow-overwrite">
-          HOW TO
+        <Button className="massive ui button"
+        as={Link}
+        to="/about"
+        id="yellow-overwrite">
+          About
         </Button>
       </div>
       <div className="make-selection">
