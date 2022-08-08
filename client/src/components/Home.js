@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Image } from "semantic-ui-react";
 import cf_logo from "../assets/cf_logo.png";
+import Auth from '../utils/auth';
+
+const token = Auth.loggedIn() ? Auth.getToken() : null;
 
 const NewGame = () => (
   <>
@@ -15,6 +18,7 @@ const NewGame = () => (
           as={Link}
           to="/game"
           id="orange-overwrite"
+          disabled={!(token)}
         >
           NEW GAME
         </Button>

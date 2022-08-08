@@ -4,13 +4,25 @@ import { Link } from "react-router-dom";
 import army from "../assets/army.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
+import Auth from '../utils/auth';
 require("dotenv").config();
 
 const Game = () => {
+  
   const movieNumber = 3;
 
   const [fetchedMovies, setFetchedMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
+
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+    if (!token) {
+      return (
+        <div id="instructions">
+        You must be logged in to start a game!
+        </div>
+      )
+    };
 
   const handleStart = async (event) => {
     event.preventDefault();
