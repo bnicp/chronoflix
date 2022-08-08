@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Image } from "semantic-ui-react";
 import cf_logo from "../assets/cf_logo.png";
-import AuthService from '../utils/auth';
+import Auth from '../utils/auth';
 
 // const token = AuthService.loggedIn() ? AuthService.getToken() : null;
 
@@ -13,7 +13,7 @@ const NewGame = () => (
     </div>
     <div className="new-game">
       <div className="make-selection">
-      {AuthService.loggedIn() ? (
+      {Auth.loggedIn() ? (
         <>
         <Button
           className="massive ui button"
