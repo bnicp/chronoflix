@@ -28,7 +28,10 @@ const NewGame = () => (
         </Button>
       </div>
       <div className="make-selection">
-        <Button className="massive ui button" id="pink-overwrite">
+        <Button className="massive ui button" 
+        as={Link}
+        to="/highscores"
+        id="pink-overwrite">
           HIGH SCORES
         </Button>
       </div>
