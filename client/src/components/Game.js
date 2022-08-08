@@ -8,11 +8,10 @@ import Auth from '../utils/auth';
 require("dotenv").config();
 
 const Game = () => {
-  
   const movieNumber = 3;
-
   const [fetchedMovies, setFetchedMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
+  const [userAnswer, setUserAnswer] = useState([]);
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -23,6 +22,19 @@ const Game = () => {
         </div>
       )
     };
+
+  const handleSelect = (event) => {
+    // event.preventDefault();
+    const selection = event.target.getAttribute('data-id');
+    if (userAnswer.indexOf(selection) !== -1 && selection === userAnswer[userAnswer.length - 1]) {
+      userAnswer.pop()
+    } else if (userAnswer.indexOf(selection) === -1) {
+      userAnswer.push(selection);
+    }
+
+    console.log(userAnswer)
+
+  };
 
   const handleStart = async (event) => {
     event.preventDefault();
@@ -75,11 +87,14 @@ const Game = () => {
       <Segment
         id={`poster${i}`}
         style={{ backgroundColor: "#de077d", borderRadius: "1rem" }}
+        
       >
         <Image
           style={{ borderRadius: "1rem" }}
           src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
           alt={`${fetchedMovies[i].title}`}
+          data-id={`${fetchedMovies[i].movieId}`}
+          onClick={handleSelect}
           className="movie-poster"
         />
       </Segment>
