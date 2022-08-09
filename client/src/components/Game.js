@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Grid, Image, Segment, Button } from "semantic-ui-react";
+import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import army from "../assets/army.jpg";
 import IMAGES from "../assets/seq_numbers/index";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
@@ -11,8 +10,8 @@ import seq_5 from "../assets/seq_numbers/seq_5.jpg";
 import seq_6 from "../assets/seq_numbers/seq_6.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
-import Auth from '../utils/auth';
-require("dotenv").config();
+import Auth from "../utils/auth";
+import { PinkButton, YellowButton } from "./styledComponents";
 
 const Game = () => {
   const movieNumber = 3;
@@ -30,18 +29,16 @@ const Game = () => {
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-    if (!token) {
-      return (
-        <div id="instructions">
-        You must be logged in to start a game!
-        </div>
-      )
-    };
+  if (!token) {
+    return <div id="instructions">You must be logged in to start a game!</div>;
+  }
 
   const handleSelect = (event) => {
+
     // const seqArr = [seq_1,seq_2,seq_3,seq_4,seq_5,seq_6];
     const selection_id = event.target.getAttribute('data-id');
     const selection_src = event.target.getAttribute('src');
+
     const select_poster = event.target;
     // const targetIndex = select_poster.getAttribute('data-index').value
     // const overlay = document.getElementById(`overlay${targetIndex}`)
@@ -50,25 +47,26 @@ const Game = () => {
     // obj.src = selection_src
     // console.log(seq_numbers)
 
-    if (userAnswer.indexOf(selection_id) !== -1 && selection_id === userAnswer[userAnswer.length - 1]) {
-      const originalPoster = userAnswerSrc[userAnswer.indexOf(selection_id)]
-      select_poster.src = `${originalPoster}`
-      select_poster.parentElement.style.backgroundColor= "#de077d"
+    if (
+      userAnswer.indexOf(selection_id) !== -1 &&
+      selection_id === userAnswer[userAnswer.length - 1]
+    ) {
+      const originalPoster = userAnswerSrc[userAnswer.indexOf(selection_id)];
+      select_poster.src = `${originalPoster}`;
+      select_poster.parentElement.style.backgroundColor = "#de077d";
       // overlay.classList.add('display')
-      userAnswer.pop()
-      userAnswerSrc.pop()
+      userAnswer.pop();
+      userAnswerSrc.pop();
     } else if (userAnswer.indexOf(selection_id) === -1) {
       userAnswer.push(selection_id);
       userAnswerSrc.push(selection_src);
-      console.log('length' + userAnswer.length)
+      console.log("length" + userAnswer.length);
       // overlay.classList.remove('display');
-      select_poster.src=`${seqArr[userAnswer.length-1]}`
-      select_poster.parentElement.style.backgroundColor= "#fff"
-
+      select_poster.src = `${seqArr[userAnswer.length - 1]}`;
+      select_poster.parentElement.style.backgroundColor = "#fff";
     }
 
-    console.log(userAnswer)
-
+    console.log(userAnswer);
   };
 
   const submitAnswers = (event) => {
@@ -124,9 +122,9 @@ const Game = () => {
         movieId: movie.id,
         title: movie.title,
         release_date: movie.release_date,
-        image: movie.poster_path
+        image: movie.poster_path,
       }));
-      console.log(movieData)
+      console.log(movieData);
       setFetchedMovies(movieData);
       setPoster(postersSrcFetch);
       // console.log(fetchedMovies);
@@ -139,7 +137,7 @@ const Game = () => {
         }
         return 0;
       }
-  
+
       let answerKey = movieData.map((a) => {
         return { ...a };
       });
@@ -147,20 +145,26 @@ const Game = () => {
       console.log(answerKey);
       setAnswerKey(answerKey);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   };
 
-  const posters = _.times(fetchedMovies.length, (i) => (  
-    <Grid.Column key={i} max={fetchedMovies.length} style={{ margin: "1rem 0 1rem 0" }}>
+  const posters = _.times(fetchedMovies.length, (i) => (
+    <Grid.Column
+      key={i}
+      max={fetchedMovies.length}
+      style={{ margin: "1rem 0 1rem 0" }}
+    >
       <Segment
         id={`poster${i}`}
+
         data-id={`${fetchedMovies[i].movieId}`}
         style={{ backgroundColor: (correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1) ?"#00ff00" : (incorrectAns.indexOf(String(fetchedMovies[i].movieId)) !== -1)? "#ff0000" : "#de077d", borderRadius: "1rem", position:"relative" }}
         
         
+
       >
-          <Image
+        <Image
           style={{ borderRadius: "1rem" }}
           src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
           alt={`${fetchedMovies[i].title}`}
@@ -172,7 +176,7 @@ const Game = () => {
           className="movie-poster"
         />
 
-          {/* <Image
+        {/* <Image
           className="movie-poster"
           style={{ borderRadius: "1rem", position: "absolute", top:"0%", left:"0%", display:"none"}}
           src={`https://belusaweb.s3.amazonaws.com/product-images/colors/Banana_banana-squeezie-al26021-gallery-1.jpg`}
@@ -182,10 +186,9 @@ const Game = () => {
           // onClick={handleSelect}
           
         /> */}
-        
       </Segment>
     </Grid.Column>
-    ));
+  ));
 
   return (
     <div id="game-screen">
@@ -201,23 +204,26 @@ const Game = () => {
         </Grid.Row>
       </Grid>
       <div className="timer">TIME LEFT: </div>
-      <Button
+      <PinkButton
         className="massive ui button"
         id="start-button"
-        onClick={handleStart}>
+        onClick={handleStart}
+      >
         START
-      </Button>
+      </PinkButton>
 
-      <Button
+      <YellowButton
         className="massive ui button"
         id="submit-button"
+
         // as={Link}
         // to="/highscores"
         style={{ marginBottom: "4rem" }}
         onClick={submitAnswers}
+
       >
         SUBMIT
-      </Button>
+      </YellowButton>
     </div>
   );
 };
