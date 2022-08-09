@@ -122,6 +122,15 @@ button {
   margin-bottom: 3rem;
 }
 
+#start-button {
+  background-color: var(--light-blue);
+  color: white;
+  border: 3px solid var(--light-blue);
+  border-radius: 0.25rem;
+  padding: 2rem 0;
+  font-size: 2rem;
+}
+
 #submit-button {
   background-color: var(--orange);
   color: white;
@@ -162,4 +171,12 @@ button {
 } */
 .nodisplay {
   display: none;
+}
+
+.correct {
+  background: #00ff00;
+}
+
+.card-poster{
+  background-color: #de077d;
 }
