@@ -1,39 +1,28 @@
 /* eslint-disable max-len */
-import React from 'react'
-import { Container, Header } from 'semantic-ui-react'
+import React from "react";
+import { Container, Header } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const About = () => (
-  <Container style={{color: "white"}} text>
-    <Header style={{color: "white"}} as='h2'>About Chronoflix</Header>
+  <Container style={{ color: "white", marginTop: "4rem" }} text>
+    <Header as="h2" style={{ color: "white" }}>
+      About Chronoflix
+    </Header>
     <p>
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-      ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et
-      magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-      ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-      quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-      arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-      Nullam dictum felis eu pede link mollis pretium. Integer tincidunt. Cras
-      dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-      Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-      Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
-      viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-      Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+      Built by a team of non-movie aficionados, ChronoFlix was built because of
+      a mutual frustration of not knowing what movies people were talking about.
+      We built ChronoFlix in order to be better trivia teammates to our friends,
+      have general knowledge in conversation, and overall curiosity about
+      movies.
     </p>
     <p>
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-      ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et
-      magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-      ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-      quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-      arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-      Nullam dictum felis eu pede link mollis pretium. Integer tincidunt. Cras
-      dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-      Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-      Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
-      viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-      Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+      This game is built on data sourced from TMDb. Using GraphQL we have a
+      responsive and quick design that results in a pleasing experience for
+      players. It is also backed by MongoDB, Javascript, and many node packages.
+      Check out our GitHub to find out more. Thanks for stopping by!
     </p>
+    <a href="https://github.com/bnicp/chronoflix">GitHub Link</a>
   </Container>
-)
+);
 
 export default About;
