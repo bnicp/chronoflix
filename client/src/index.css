@@ -60,50 +60,6 @@ h1 {
   font-size: 3.5rem;
 }
 
-/* new game screen */
-.button,
-button {
-  width: 45%;
-}
-
-.make-selection {
-  margin: 3rem 0;
-}
-
-/* overwriting semantic UI button styles */
-#orange-overwrite {
-  background-color: var(--dark-blue);
-  color: var(--orange);
-  border: 3px solid var(--orange);
-}
-
-#yellow-overwrite {
-  background-color: var(--dark-blue);
-  color: var(--yellow);
-  border: 3px solid var(--yellow);
-}
-
-#pink-overwrite {
-  background-color: var(--dark-blue);
-  color: var(--pink);
-  border: 3px solid var(--pink);
-}
-
-#orange-overwrite:hover {
-  background-color: var(--orange);
-  color: white;
-}
-
-#yellow-overwrite:hover {
-  background-color: var(--yellow);
-  color: white;
-}
-
-#pink-overwrite:hover {
-  background-color: var(--pink);
-  color: white;
-}
-
 #instructions {
   margin: 2rem 0 2rem 0;
   color: white;
