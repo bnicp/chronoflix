@@ -5,8 +5,6 @@ import cf_logo from "../assets/cf_logo.png";
 import AuthService from "../utils/auth";
 import { YellowButton, OrangeButton, PinkButton } from "./styledComponents";
 
-// const token = AuthService.loggedIn() ? AuthService.getToken() : null;
-
 const NewGame = () => (
   <>
     <div className="logo">

@@ -78,15 +78,6 @@ h1 {
   margin-bottom: 3rem;
 }
 
-#submit-button {
-  background-color: var(--orange);
-  color: white;
-  border: 3px solid var(--orange);
-  border-radius: 0.25rem;
-  padding: 2rem 0;
-  font-size: 2rem;
-}
-
 /* high score screen */
 .heading {
   margin-bottom: 4rem;
@@ -95,12 +86,6 @@ h1 {
 #all,
 #one {
   max-width: 80%;
-}
-
-.new-game {
-  border-radius: 0.25rem;
-  font-size: 2rem;
-  padding-bottom: 2rem;
 }
 
 #nav-logo {

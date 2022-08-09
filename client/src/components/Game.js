@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Grid, Image, Segment, Button } from "semantic-ui-react";
+import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import army from "../assets/army.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
-import Auth from '../utils/auth';
-require("dotenv").config();
+import Auth from "../utils/auth";
+import { PinkButton, YellowButton } from "./styledComponents";
 
 const Game = () => {
   const movieNumber = 3;
@@ -15,25 +14,23 @@ const Game = () => {
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-    if (!token) {
-      return (
-        <div id="instructions">
-        You must be logged in to start a game!
-        </div>
-      )
-    };
+  if (!token) {
+    return <div id="instructions">You must be logged in to start a game!</div>;
+  }
 
   const handleSelect = (event) => {
     // event.preventDefault();
-    const selection = event.target.getAttribute('data-id');
-    if (userAnswer.indexOf(selection) !== -1 && selection === userAnswer[userAnswer.length - 1]) {
-      userAnswer.pop()
+    const selection = event.target.getAttribute("data-id");
+    if (
+      userAnswer.indexOf(selection) !== -1 &&
+      selection === userAnswer[userAnswer.length - 1]
+    ) {
+      userAnswer.pop();
     } else if (userAnswer.indexOf(selection) === -1) {
       userAnswer.push(selection);
     }
 
-    console.log(userAnswer)
-
+    console.log(userAnswer);
   };
 
   const handleStart = async (event) => {
@@ -56,9 +53,9 @@ const Game = () => {
         movieId: movie.id,
         title: movie.title,
         release_date: movie.release_date,
-        image: movie.poster_path
+        image: movie.poster_path,
       }));
-      console.log(movieData)
+      console.log(movieData);
       setFetchedMovies(movieData);
       // console.log(fetchedMovies);
       function compare(a, b) {
@@ -70,7 +67,7 @@ const Game = () => {
         }
         return 0;
       }
-  
+
       let answerKey = movieData.map((a) => {
         return { ...a };
       });
@@ -78,16 +75,19 @@ const Game = () => {
       console.log(answerKey);
       setAnswerKey(answerKey);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   };
 
   const posters = _.times(fetchedMovies.length, (i) => (
-    <Grid.Column key={i} max={fetchedMovies.length} style={{ margin: "1rem 0 1rem 0" }}>
+    <Grid.Column
+      key={i}
+      max={fetchedMovies.length}
+      style={{ margin: "1rem 0 1rem 0" }}
+    >
       <Segment
         id={`poster${i}`}
         style={{ backgroundColor: "#de077d", borderRadius: "1rem" }}
-        
       >
         <Image
           style={{ borderRadius: "1rem" }}
@@ -115,22 +115,22 @@ const Game = () => {
         </Grid.Row>
       </Grid>
       <div className="timer">TIME LEFT: </div>
-      <Button
+      <PinkButton
         className="massive ui button"
         id="start-button"
-        onClick={handleStart}>
+        onClick={handleStart}
+      >
         START
-      </Button>
+      </PinkButton>
 
-      <Button
+      <YellowButton
         className="massive ui button"
         id="submit-button"
         as={Link}
         to="/highscores"
-        style={{ marginBottom: "4rem" }}
       >
         SUBMIT
-      </Button>
+      </YellowButton>
     </div>
   );
 };
