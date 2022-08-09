@@ -21,7 +21,7 @@ const About = () => (
       players. It is also backed by MongoDB, Javascript, and many node packages.
       Check out our GitHub to find out more. Thanks for stopping by!
     </p>
-    <a href="https://github.com/bnicp/chronoflix">GitHub Link</a>
+    <a href="https://github.com/bnicp/chronoflix" rel="noreferrer noopener" target="_blank">GitHub Link</a>
   </Container>
 );
 

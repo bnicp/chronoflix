@@ -19,6 +19,18 @@ const Game = () => {
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswer, setUserAnswer] = useState([]);
   const [userAnswerSrc, setUserAnswerSrc] = useState([]);
+  const [correctColor, setCorrect] = useState(false);
+  const [correctAns, setCorrectAns] = useState([]);
+  const [incorrectAns, setIncorrectAns] = useState([]);
+  const [posterSrc, setPoster] = useState([]);
+  const [seqArr, setSeqArr] = useState([
+    seq_1,
+    seq_2,
+    seq_3,
+    seq_4,
+    seq_5,
+    seq_6,
+  ]);
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -27,9 +39,10 @@ const Game = () => {
   }
 
   const handleSelect = (event) => {
-    const seqArr = [seq_1, seq_2, seq_3, seq_4, seq_5, seq_6];
+    // const seqArr = [seq_1,seq_2,seq_3,seq_4,seq_5,seq_6];
     const selection_id = event.target.getAttribute("data-id");
     const selection_src = event.target.getAttribute("src");
+
     const select_poster = event.target;
     // const targetIndex = select_poster.getAttribute('data-index').value
     // const overlay = document.getElementById(`overlay${targetIndex}`)
@@ -60,6 +73,31 @@ const Game = () => {
     console.log(userAnswer);
   };
 
+  const submitAnswers = (event) => {
+    event.preventDefault();
+    console.log(userAnswer);
+    console.log(answerKey);
+    const correctArr = [];
+    const incorrectArr = [];
+    for (let i = 0; i < answerKey.length; i++) {
+      if (answerKey[i].movieId === Number(userAnswer[i])) {
+        console.log("correct");
+        correctArr.push(userAnswer[i]);
+
+        // document.getElementById(`poster${i}`).style.backgroundColor= "#00ff00";
+      } else {
+        incorrectArr.push(userAnswer[i]);
+      }
+    }
+    console.log(incorrectAns);
+    setCorrectAns(correctArr);
+    setIncorrectAns(incorrectAns);
+
+    for (let i = 0; i < correctAns.length; i++) {
+      // setCorrect(!correctColor)
+    }
+  };
+
   const handleStart = async (event) => {
     event.preventDefault();
 
@@ -76,6 +114,10 @@ const Game = () => {
         }
       } while (movieArr.length < 6);
 
+      const postersSrcFetch = movieArr.map((poster) => ({
+        image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`,
+      }));
+
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
         title: movie.title,
@@ -84,6 +126,7 @@ const Game = () => {
       }));
       console.log(movieData);
       setFetchedMovies(movieData);
+      setPoster(postersSrcFetch);
       // console.log(fetchedMovies);
       function compare(a, b) {
         if (a.release_date < b.release_date) {
@@ -114,19 +157,30 @@ const Game = () => {
     >
       <Segment
         id={`poster${i}`}
+        data-id={`${fetchedMovies[i].movieId}`}
         style={{
-          backgroundColor: "#de077d",
+          backgroundColor:
+            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? "#00ff00"
+              : incorrectAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? "#ff0000"
+              : "#de077d",
           borderRadius: "1rem",
           position: "relative",
         }}
       >
         <Image
           style={{ borderRadius: "1rem" }}
-          src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          src={
+            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
+              : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`
+          }
           alt={`${fetchedMovies[i].title}`}
           data-id={`${fetchedMovies[i].movieId}`}
+          id={`${fetchedMovies[i].movieId}`}
           data-index={`${[i]}`}
-          // data-src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          data-src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
           onClick={handleSelect}
           className="movie-poster"
         />
@@ -170,8 +224,10 @@ const Game = () => {
       <YellowButton
         className="massive ui button"
         id="submit-button"
-        as={Link}
-        to="/highscores"
+        // as={Link}
+        // to="/highscores"
+        style={{ marginBottom: "4rem" }}
+        onClick={submitAnswers}
       >
         SUBMIT
       </YellowButton>

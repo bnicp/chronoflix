@@ -101,7 +101,7 @@ const SignupForm = () => {
           !(
             userFormData.email &&
             userFormData.password &&
-            userFormData.password
+            userFormData.username
           )
         }
       >
