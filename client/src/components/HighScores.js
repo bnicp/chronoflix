@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Grid, Button } from "semantic-ui-react";
+import { PinkButton, YellowButton } from "./styledComponents";
 
 const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
@@ -35,24 +36,22 @@ const HighScores = () => (
       <h1 style={{ color: "white" }}>YOUR SCORE</h1>
       <h1 style={{ color: "white" }}>TIME: {20 * 60} SECONDS</h1>
     </div>
-    <Button
+    <PinkButton
       style={{ marginBottom: "2rem" }}
       as={Link}
       to="/game"
-      className="massive ui button new-game"
-      id="yellow-overwrite"
+      className="massive ui button"
     >
       NEW GAME
-    </Button>
-    <Button
+    </PinkButton>
+    <YellowButton
       style={{ marginBottom: "2rem" }}
       as={Link}
       to="/"
-      className="massive ui button new-game"
-      id="pink-overwrite"
+      className="massive ui button"
     >
       HOME
-    </Button>
+    </YellowButton>
   </div>
 );
 

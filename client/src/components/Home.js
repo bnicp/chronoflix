@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Image } from "semantic-ui-react";
 import cf_logo from "../assets/cf_logo.png";
 import AuthService from "../utils/auth";
+import { YellowButton, OrangeButton, PinkButton } from "./styledComponents";
 
 const NewGame = () => (
   <>
@@ -12,37 +13,22 @@ const NewGame = () => (
     <div className="new-game">
       <div className="make-selection">
         {AuthService.loggedIn() ? (
-          <Button
-            className="massive ui button"
-            as={Link}
-            to="/game"
-            id="orange-overwrite"
-          >
+          <OrangeButton as={Link} to="/game" className="massive ui button">
             NEW GAME
-          </Button>
+          </OrangeButton>
         ) : (
           <></>
         )}
       </div>
       <div className="make-selection">
-        <Button
-          className="massive ui button"
-          as={Link}
-          to="/about"
-          id="yellow-overwrite"
-        >
+        <YellowButton as={Link} to="/about" className="massive ui button">
           ABOUT
-        </Button>
+        </YellowButton>
       </div>
       <div className="make-selection">
-        <Button
-          className="massive ui button"
-          as={Link}
-          to="/highscores"
-          id="pink-overwrite"
-        >
+        <PinkButton as={Link} to="/highscores" className="massive ui button">
           HIGH SCORES
-        </Button>
+        </PinkButton>
       </div>
     </div>
   </>
