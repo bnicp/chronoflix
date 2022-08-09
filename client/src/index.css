@@ -78,6 +78,26 @@ h1 {
   margin-bottom: 3rem;
 }
 
+
+#start-button {
+  background-color: var(--light-blue);
+  color: white;
+  border: 3px solid var(--light-blue);
+  border-radius: 0.25rem;
+  padding: 2rem 0;
+  font-size: 2rem;
+}
+
+#submit-button {
+  background-color: var(--orange);
+  color: white;
+  border: 3px solid var(--orange);
+  border-radius: 0.25rem;
+  padding: 2rem 0;
+  font-size: 2rem;
+}
+
+
 /* high score screen */
 .heading {
   margin-bottom: 4rem;
@@ -103,4 +123,12 @@ h1 {
 } */
 .nodisplay {
   display: none;
+}
+
+.correct {
+  background: #00ff00;
+}
+
+.card-poster{
+  background-color: #de077d;
 }
