@@ -160,3 +160,6 @@ button {
 /* .twelve.wide.column {
   float: right;
 } */
+.nodisplay {
+  display: none;
+}
