@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Button, Form, FormGroup } from "semantic-ui-react";
+import { Form, FormGroup } from "semantic-ui-react";
+import { PinkButton } from "./styledComponents";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 
@@ -94,99 +95,20 @@ const SignupForm = () => {
           />
         </Form.Field>
       </Form.Group>
-      <Button
-        inverted
-        color="red"
+      <PinkButton
         type="submit"
-        style={{ fontSize: "18px", marginTop: "1.5em" }}
         disabled={
           !(
-            userFormData.username &&
             userFormData.email &&
-            userFormData.password
+            userFormData.password &&
+            userFormData.username
           )
         }
       >
-        Submit
-      </Button>
+        SUBMIT
+      </PinkButton>
     </Form>
   );
-
-  // return (
-  //   <>
-  //     {/* This is needed for the validation functionality above */}
-  //     {/*validated={validated} */}
-  //     <Form noValidate onSubmit={handleFormSubmit}>
-  //       {/* show alert if server response is bad */}
-  //       <Alert
-  //         dismissible
-  //         // onClose={() => setShowAlert(false)}
-  //         // show={showAlert}
-  //         variant="danger"
-  //       >
-  //         Something went wrong with your signup!
-  //       </Alert>
-
-  //       <Form.Group>
-  //         <Form.Label htmlFor="username">Username</Form.Label>
-  //         {/* <Form.Control
-  //           type="text"
-  //           placeholder="Your username"
-  //           name="username"
-  //           onChange={handleInputChange}
-  //           value={userFormData.username}
-  //           required
-  //         /> */}
-  //         <Form.Control.Feedback type="invalid">
-  //           Username is required!
-  //         </Form.Control.Feedback>
-  //       </Form.Group>
-
-  //       <Form.Group>
-  //         <Form.Label htmlFor="email">Email</Form.Label>
-  //         <Form.Control
-  //           type="email"
-  //           placeholder="Your email address"
-  //           name="email"
-  //           // onChange={handleInputChange}
-  //           // value={userFormData.email}
-  //           required
-  //         />
-  //         <Form.Control.Feedback type="invalid">
-  //           Email is required!
-  //         </Form.Control.Feedback>
-  //       </Form.Group>
-
-  //       <Form.Group>
-  //         <Form.Label htmlFor="password">Password</Form.Label>
-  //         <Form.Control
-  //           type="password"
-  //           placeholder="Your password"
-  //           name="password"
-  //           // onChange={handleInputChange}
-  //           // value={userFormData.password}
-  //           required
-  //         />
-  //         <Form.Control.Feedback type="invalid">
-  //           Password is required!
-  //         </Form.Control.Feedback>
-  //       </Form.Group>
-  //       <Button
-  //         // disabled={
-  //         //   !(
-  //         //     userFormData.username &&
-  //         //     userFormData.email &&
-  //         //     userFormData.password
-  //         //   )
-  //         // }
-  //         type="submit"
-  //         variant="success"
-  //       >
-  //         Submit
-  //       </Button>
-  //     </Form>
-  //   </>
-  // );
 };
 
 export default SignupForm;
