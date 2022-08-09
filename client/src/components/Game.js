@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
@@ -23,7 +23,9 @@ const Game = () => {
   const [correctAns, setCorrectAns] = useState([]);
   const [incorrectAns, setIncorrectAns] = useState([]);
   const [posterSrc, setPoster] = useState([]);
-  const [seqArr, setSeqArr] = useState([seq_1,seq_2,seq_3,seq_4,seq_5,seq_6])
+  const [seqArr, setSeqArr] = useState([seq_1,seq_2,seq_3,seq_4,seq_5,seq_6]);
+
+  const navigate = useNavigate();
 
   
 
@@ -77,23 +79,19 @@ const Game = () => {
     const incorrectArr = [];
     for (let i=0; i<answerKey.length; i++){
       if (answerKey[i].movieId === Number(userAnswer[i])){
-        console.log("correct")
         correctArr.push(userAnswer[i]);
-        
-        // document.getElementById(`poster${i}`).style.backgroundColor= "#00ff00";
-
       } else {
-        incorrectArr.push(userAnswer[i])
+        incorrectArr.push(userAnswer[i]);
       }
     }
-    console.log(incorrectAns)
     setCorrectAns(correctArr);
-    setIncorrectAns(incorrectAns);
+    setIncorrectAns(incorrectArr);
 
-    for (let i=0; i<correctAns.length; i++){
+    if (correctArr.length === answerKey.length){
       
-    // setCorrect(!correctColor)
-
+      navigate('/highscores', {replace: true}, [navigate]);
+    } else {
+      return console.log('Try again')
     }
     
   }
