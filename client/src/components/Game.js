@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
@@ -9,55 +9,38 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
+import { useElapsedTime } from "use-elapsed-time";
 
-const Game = () => {
+export default function Game() {
   const movieNumber = 3;
   const [randomMovies, setRandomMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswerArray, setUserAnswerArray] = useState([]);
   const [currentSelectedMovie, setCurrentSelectedMovie] = useState([]);
-
-  const [second, setSecond] = useState("00");
-  const [minute, setMinute] = useState("00");
-  const [counter, setCounter] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
-
-  const [isStarted, setIsStarted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [seconds, setSeconds] = useState(0);
 
   const [seed, setSeed] = useState(1);
 
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
+  useEffect(() => {
+    let interval;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => seconds + 1);
+      }, 1000);
+    } else {
+      setSeconds(0);
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, setSeconds]);
+
   if (!token) {
     return <div id="instructions">You must be logged in to start a game!</div>;
   }
-  let totalSeconds = 0;
-  const timer = () => {
-    const current = setInterval(setTime, 1000);
-
-    function setTime() {
-      ++totalSeconds;
-      setCounter(totalSeconds);
-      setSecond(pad(totalSeconds % 60));
-      setMinute(pad(parseInt(totalSeconds / 60)));
-    }
-    function pad(val) {
-      var valString = val + "";
-      if (valString.length < 2) {
-        return "0" + valString;
-      } else {
-        return valString;
-      }
-    }
-
-    const submitButton = document.querySelector("#submit-button");
-    submitButton.addEventListener("click", () => {
-      if (isWinner) {
-        clearInterval(current);
-      }
-    });
-  };
 
   const handleSelect = (event) => {
     const movieId = event.target.getAttribute("data-id");
@@ -78,6 +61,8 @@ const Game = () => {
   const submitAnswers = (event) => {
     const correctArr = [];
     const incorrectArr = [];
+    // stopCounting();
+
     for (let i = 0; i < answerKey.length; i++) {
       if (answerKey[i].movieId === Number(userAnswerArray[i])) {
         correctArr.push(userAnswerArray[i]);
@@ -88,38 +73,28 @@ const Game = () => {
 
     if (correctArr.length === answerKey.length) {
       setIsWinner(true);
-      // clearInterval(current)
-      // console.log(current)
-      console.log(counter);
       let score;
-      if (counter <= 20) {
-        score = Math.ceil(5000 - 41 * counter);
-      } else if (counter > 20 && counter < 40) {
-        score = Math.ceil(4160 * (0.75 * counter * 0.01));
-      } else if (counter >= 40 && counter <= 60) {
-        score = Math.ceil(2943 * (0.75 * counter * 0.01));
-      } else {
-        score = Math.ceil(1618 * (0.5 * counter));
-      }
-      console.log(score);
+      // if (counter <= 20) {
+      //   score = Math.ceil(5000 - 41 * counter);
+      // } else if (counter > 20 && counter < 40) {
+      //   score = Math.ceil(4160 * (0.75 * counter * 0.01));
+      // } else if (counter >= 40 && counter <= 60) {
+      //   score = Math.ceil(2943 * (0.75 * counter * 0.01));
+      // } else {
+      //   score = Math.ceil(1618 * (0.5 * counter));
+      // }
+
       navigate("/highscores", { replace: true }, [navigate]);
       return console.log("Timer should be stopped");
     } else {
       setSeed(Math.random());
-      setUserAnswer([]);
-      setUserAnswerSrc([]);
+
       return console.log("Try again");
     }
   };
 
   const handleStart = async (event) => {
-    event.preventDefault();
-    setIsStarted(true);
-    setCounter(0);
-    setSecond("00");
-    setMinute("00");
-    totalSeconds = 0;
-    timer();
+    setIsPlaying(!isPlaying);
 
     try {
       const response = await fetchMovies();
@@ -233,16 +208,14 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
-      <div className="timer">
-        TIMER: {minute}:{second}
-      </div>
+      <div className="timer">TIME ELAPSED: {seconds}</div>
 
       <PinkButton
         className="massive ui button"
         id="start-button"
         onClick={handleStart}
       >
-        {!isStarted ? "START" : "RESET"}
+        {!isPlaying ? "START" : "RESET"}
       </PinkButton>
       {/* { !isStarted ? ( null ) : ( ) } */}
       <YellowButton
@@ -250,15 +223,13 @@ const Game = () => {
         id="submit-button"
         style={{
           marginBottom: "4rem",
-          visibility: isStarted ? "visible" : "hidden",
+          // visibility: isPlaying ? "visible" : "hidden",
         }}
         onClick={submitAnswers}
-        disabled={userAnswer.length != movieNumber}
+        disabled={userAnswerArray.length != movieNumber}
       >
         SUBMIT
       </YellowButton>
     </div>
   );
-};
-
-export default Game;
+}
