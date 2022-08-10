@@ -25,6 +25,8 @@ export default function Game() {
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
+  const [isStarted, setIsStarted] = useState(false);
+
   useEffect(() => {
     let interval;
     if (isPlaying) {
@@ -94,7 +96,7 @@ export default function Game() {
 
   const handleStart = async (event) => {
     setIsPlaying(!isPlaying);
-
+    setIsStarted(true);
     try {
       const response = await fetchMovies();
       const movies = await response.json();
@@ -216,19 +218,19 @@ export default function Game() {
       >
         {!isPlaying ? "START" : "RESET"}
       </PinkButton>
-      {/* { !isStarted ? ( null ) : ( ) } */}
+      { !isStarted ? ( null ) : ( 
       <YellowButton
         className="huge ui button"
         id="submit-button"
         style={{
           marginBottom: "4rem",
-          // visibility: isPlaying ? "visible" : "hidden",
         }}
         onClick={submitAnswers}
         disabled={userAnswerArray.length != movieNumber}
       >
         SUBMIT
       </YellowButton>
+      ) }
     </div>
   );
 }
