@@ -209,26 +209,32 @@ export default function Game() {
       </Grid>
       <div className="timer">TIME ELAPSED: {seconds}</div>
 
-      <PinkButton
-        className="massive ui button"
-        id="start-button"
-        onClick={handleStart}
-      >
-        {!isPlaying ? "START" : "RESET"}
-      </PinkButton>
-      {/* { !isStarted ? ( null ) : ( ) } */}
-      <YellowButton
-        className="massive ui button"
-        id="submit-button"
-        style={{
-          marginBottom: "4rem",
-          // visibility: isPlaying ? "visible" : "hidden",
-        }}
-        onClick={submitAnswers}
-        disabled={userAnswerArray.length != movieNumber}
-      >
-        SUBMIT
-      </YellowButton>
+      {isPlaying ? (
+        <></>
+      ) : (
+        <PinkButton
+          className="massive ui button"
+          id="start-button"
+          onClick={handleStart}
+        >
+          START
+        </PinkButton>
+      )}
+      {isPlaying ? (
+        <YellowButton
+          className="massive ui button"
+          id="submit-button"
+          style={{
+            marginBottom: "4rem",
+          }}
+          onClick={submitAnswers}
+          disabled={userAnswerArray.length != movieNumber}
+        >
+          SUBMIT
+        </YellowButton>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
