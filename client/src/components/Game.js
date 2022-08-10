@@ -12,6 +12,7 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
+import { getNullableType } from "graphql";
 
 const Game = () => {
   const movieNumber = 3;
@@ -33,7 +34,7 @@ const Game = () => {
 
   const navigate = useNavigate();
 
-  
+  const [isStarted, setIsStarted] = useState(false);
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -150,8 +151,12 @@ const Game = () => {
 
   const handleStart = async (event) => {
     event.preventDefault();
+
+    setIsStarted(true);
+
     timer();
     
+
 
     try {
       const response = await fetchMovies();
@@ -189,6 +194,8 @@ const Game = () => {
         }
         return 0;
       }
+
+      setIsStarted(true);
 
       let answerKey = movieData.map((a) => {
         return { ...a };
@@ -255,15 +262,20 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
+
+      <div className="timer">TIME LEFT: </div> 
+
       <div className="timer">TIMER: {minute}:{second}</div>
+
       <PinkButton
         className="massive ui button"
         id="start-button"
         onClick={handleStart}
       >
-        START
+        {isStarted ? ( "RESET"
+        ) : ( "START" )}
       </PinkButton>
-
+      { !isStarted ? ( null ) : (
       <YellowButton
         className="massive ui button"
         id="submit-button"
@@ -276,6 +288,7 @@ const Game = () => {
       >
         SUBMIT
       </YellowButton>
+)}
     </div>
   );
 };
