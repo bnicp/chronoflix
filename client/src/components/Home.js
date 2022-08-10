@@ -13,7 +13,7 @@ const NewGame = () => (
     <div className="new-game">
       <div className="make-selection">
         {AuthService.loggedIn() ? (
-          <OrangeButton as={Link} to="/game" className="massive ui button">
+          <OrangeButton as={Link} to="/game" className="huge ui button">
             NEW GAME
           </OrangeButton>
         ) : (
@@ -21,12 +21,12 @@ const NewGame = () => (
         )}
       </div>
       <div className="make-selection">
-        <YellowButton as={Link} to="/about" className="massive ui button">
+        <YellowButton as={Link} to="/about" className="huge ui button">
           ABOUT
         </YellowButton>
       </div>
       <div className="make-selection">
-        <PinkButton as={Link} to="/highscores" className="massive ui button">
+        <PinkButton as={Link} to="/highscores" className="huge ui button">
           HIGH SCORES
         </PinkButton>
       </div>
