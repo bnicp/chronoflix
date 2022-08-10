@@ -58,19 +58,19 @@ export default function Game() {
   };
 
   const submitAnswers = (event) => {
-    const correctArr = [];
-    const incorrectArr = [];
+    let counter = 0;
+    let i = 0;
     // stopCounting();
 
-    for (let i = 0; i < answerKey.length; i++) {
-      if (answerKey[i].movieId === Number(userAnswerArray[i])) {
-        correctArr.push(userAnswerArray[i]);
-      } else {
-        incorrectArr.push(userAnswerArray[i]);
+    while (i < answerKey.length) {
+      if (answerKey[i].toString() === userAnswerArray[i]) {
+        counter++;
       }
+      i++;
     }
 
-    if (correctArr.length === answerKey.length) {
+    if (counter == answerKey.length) {
+      setIsPlaying(false);
       setIsWinner(true);
       let score;
       // if (counter <= 20) {
@@ -84,10 +84,11 @@ export default function Game() {
       // }
 
       navigate("/highscores", { replace: true }, [navigate]);
-      return console.log("Timer should be stopped");
     } else {
+      // What is this seed for?
       setSeed(Math.random());
 
+      // Make this a disappearing modal or something?
       return console.log("Try again");
     }
   };
@@ -199,6 +200,7 @@ export default function Game() {
       <div id="instructions">
         Click the poster images to place the movies in order by release year.
       </div>
+      {/* is seed necessary for the key? */}
       <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
         <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
