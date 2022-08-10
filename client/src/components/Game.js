@@ -140,10 +140,9 @@ const Game = () => {
         score = Math.ceil((1618 - (.5 * counter)))
       }
       console.log(score)
-
+      navigate('/highscores', {replace: true}, [navigate]);
       return console.log('Timer should be stopped')
       
-      // navigate('/highscores', {replace: true}, [navigate]);
     } else {
         setSeed(Math.random());
         setUserAnswer([]);
