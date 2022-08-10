@@ -38,6 +38,33 @@ const Game = () => {
     return <div id="instructions">You must be logged in to start a game!</div>;
   }
 
+  const timer = () => {
+    let totalSeconds = 0;
+    const current = setInterval(setTime, 1000);
+
+    function setTime() {
+      ++totalSeconds;
+      setCounter(totalSeconds);
+      setSecond(pad(totalSeconds % 60));
+      setMinute(pad(parseInt(totalSeconds / 60)));
+    }
+    function pad(val) {
+      var valString = val + "";
+      if (valString.length < 2) {
+        return "0" + valString;
+      } else {
+        return valString;
+      }
+    }
+
+    const submitButton = document.querySelector("#submit-button");
+    submitButton.addEventListener("click", () => {
+      if (isWinner) {
+        clearInterval(current);
+      }
+    });
+  };
+
   const handleSelect = (event) => {
     // const seqArr = [seq_1,seq_2,seq_3,seq_4,seq_5,seq_6];
     const selection_id = event.target.getAttribute("data-id");
@@ -93,13 +120,34 @@ const Game = () => {
     setCorrectAns(correctArr);
     setIncorrectAns(incorrectArr);
 
-    for (let i = 0; i < correctAns.length; i++) {
-      // setCorrect(!correctColor)
+    if (correctArr.length === answerKey.length) {
+      setIsWinner(true);
+      // clearInterval(current)
+      // console.log(current)
+      console.log(counter);
+      let score;
+      if (counter <= 20) {
+        score = Math.ceil(5000 - 41 * counter);
+      } else if (counter > 20 && counter < 40) {
+        score = Math.ceil(4160 - 0.75 * counter);
+      } else if (counter >= 40 && counter <= 60) {
+        score = Math.ceil(2943 - 0.75 * counter);
+      } else {
+        score = Math.ceil(1618 - 0.5 * counter);
+      }
+      console.log(score);
+
+      return console.log("Timer should be stopped");
+
+      // navigate('/highscores', {replace: true}, [navigate]);
+    } else {
+      return console.log("Try again");
     }
   };
 
   const handleStart = async (event) => {
     event.preventDefault();
+    timer();
 
     try {
       const response = await fetchMovies();
@@ -112,7 +160,7 @@ const Game = () => {
         if (movieArr.indexOf(addMovie) === -1) {
           movieArr.push(addMovie);
         }
-      } while (movieArr.length < 6);
+      } while (movieArr.length < 3);
 
       const postersSrcFetch = movieArr.map((poster) => ({
         image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`,
@@ -212,7 +260,9 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
-      <div className="timer">TIME LEFT: </div>
+      <div className="timer">
+        TIMER: {minute}:{second}
+      </div>
       <PinkButton
         className="massive ui button"
         id="start-button"
