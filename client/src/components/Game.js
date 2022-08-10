@@ -9,7 +9,6 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
-import { useElapsedTime } from "use-elapsed-time";
 
 export default function Game() {
   const movieNumber = 3;
