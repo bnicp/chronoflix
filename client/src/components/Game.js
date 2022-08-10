@@ -12,7 +12,6 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
-import { getNullableType } from "graphql";
 
 const Game = () => {
   const movieNumber = 3;
@@ -30,20 +29,24 @@ const Game = () => {
   const [minute, setMinute] = useState('00');
   const [counter, setCounter] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
+
+  const [isStarted, setIsStarted] = useState(false)
+
+  const [seed, setSeed] = useState(1);
   
 
   const navigate = useNavigate();
 
-  const [isStarted, setIsStarted] = useState(false);
+  
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
   if (!token) {
     return <div id="instructions">You must be logged in to start a game!</div>;
   }
-
+  let totalSeconds = 0;
   const timer = ()=>{
-    let totalSeconds = 0;
+    
     const current = setInterval(setTime, 1000);
 
     function setTime() {
@@ -105,6 +108,7 @@ const Game = () => {
     }
 
     console.log(userAnswer);
+    
   };
 
   const submitAnswers = (event) => {
@@ -132,18 +136,20 @@ const Game = () => {
       if (counter <= 20 ){
         score = Math.ceil((5000-(41*counter)))
       } else if (counter > 20 && counter < 40){
-        score = Math.ceil((4160 - (.75 * counter)))
+        score = Math.ceil((4160 * ((.75 * counter) * .01)))
       } else if (counter >= 40 && counter <= 60){
-        score = Math.ceil((2943 - (.75 * counter)))
+        score = Math.ceil((2943 * ((.75 * counter) * .01)))
       } else {
-        score = Math.ceil((1618 - (.5 * counter)))
+        score = Math.ceil((1618 * (.5 * counter)))
       }
       console.log(score)
-
+      navigate('/highscores', {replace: true}, [navigate]);
       return console.log('Timer should be stopped')
       
-      // navigate('/highscores', {replace: true}, [navigate]);
     } else {
+        setSeed(Math.random());
+        setUserAnswer([]);
+        setUserAnswerSrc([]);
       return console.log('Try again')
     }
     
@@ -151,12 +157,17 @@ const Game = () => {
 
   const handleStart = async (event) => {
     event.preventDefault();
-
     setIsStarted(true);
-
+    setUserAnswer([]);
+    setUserAnswerSrc([]);
+    setCorrectAns([]);
+    setIncorrectAns([]);
+    setCounter(0);
+    setSecond('00');
+    setMinute('00');
+    totalSeconds= 0;
     timer();
     
-
 
     try {
       const response = await fetchMovies();
@@ -169,7 +180,7 @@ const Game = () => {
         if (movieArr.indexOf(addMovie) === -1) {
           movieArr.push(addMovie);
         }
-      } while (movieArr.length < 3);
+      } while (movieArr.length < movieNumber);
 
       const postersSrcFetch = movieArr.map((poster) => ({
         image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`
@@ -195,8 +206,6 @@ const Game = () => {
         return 0;
       }
 
-      setIsStarted(true);
-
       let answerKey = movieData.map((a) => {
         return { ...a };
       });
@@ -206,6 +215,7 @@ const Game = () => {
     } catch (err) {
       console.error(err);
     }
+    
   };
 
   const posters = _.times(fetchedMovies.length, (i) => (
@@ -225,7 +235,7 @@ const Game = () => {
       >
         <Image
           style={{ borderRadius: "1rem" }}
-          src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
           alt={`${fetchedMovies[i].title}`}
           data-id={`${fetchedMovies[i].movieId}`}
           id={`${fetchedMovies[i].movieId}`}
@@ -254,7 +264,7 @@ const Game = () => {
       <div id="instructions">
         Click the poster images to place the movies in order by release year.
       </div>
-      <Grid centered style={{ marginBottom: "4rem" }}>
+      <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
         <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
@@ -262,33 +272,28 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
-
-      <div className="timer">TIME LEFT: </div> 
-
       <div className="timer">TIMER: {minute}:{second}</div>
-
+   
       <PinkButton
         className="massive ui button"
         id="start-button"
         onClick={handleStart}
       >
-        {isStarted ? ( "RESET"
-        ) : ( "START" )}
+        {!isStarted?
+        'START' : 'RESET'}
       </PinkButton>
-      { !isStarted ? ( null ) : (
+      {/* { !isStarted ? ( null ) : ( ) } */}
       <YellowButton
         className="massive ui button"
         id="submit-button"
-
-        // as={Link}
-        // to="/highscores"
-        style={{ marginBottom: "4rem" }}
+        style={{ marginBottom: "4rem", visibility: (isStarted?'visible':'hidden') }}
         onClick={submitAnswers}
-
+        disabled={userAnswer.length != movieNumber}
+        
       >
         SUBMIT
       </YellowButton>
-)}
+  
     </div>
   );
 };
