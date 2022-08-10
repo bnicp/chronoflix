@@ -16,16 +16,16 @@ const scores = colors.map((color, i) => (
 const HighScores = () => (
   <div id="high-scores">
     <div className="heading">
-      <h1 style={{ color: "white" }}>HIGH SCORES</h1>
+      <h3 style={{ color: "white" }}>HIGH SCORES</h3>
     </div>
     <Grid
       textAlign="center"
       columns="equal"
       centered
       className="universal-scores"
-      style={{ marginBottom: "2rem" }}
+      style={{ margin: "0 0 2rem 2rem", fontSize: "1rem" }}
     >
-      <Grid.Row style={{ color: "white" }} centered columns={3}>
+      <Grid.Row style={{ color: "white"}} centered columns={3}>
         <Grid.Column>PLACE</Grid.Column>
         <Grid.Column>USERNAME</Grid.Column>
         <Grid.Column>SCORE</Grid.Column>
@@ -33,9 +33,11 @@ const HighScores = () => (
       {scores}
     </Grid>
     <div className="current-user-scores" style={{ marginBottom: "2rem" }}>
-      <h1 style={{ color: "white" }}>YOUR SCORE</h1>
-      <h1 style={{ color: "white" }}>TIME: {20 * 60} SECONDS</h1>
+      <h4 style={{ color: "white" }}>YOUR SCORE</h4>
+      <h4 style={{ color: "white" }}>TIME: {20 * 60} SECONDS</h4>
     </div>
+
+    <Grid.Row columns={1} only="mobile tablet">
     <PinkButton
       style={{ marginBottom: "2rem" }}
       as={Link}
@@ -44,6 +46,9 @@ const HighScores = () => (
     >
       NEW GAME
     </PinkButton>
+    </Grid.Row>
+    <Grid.Row columns={1} only="mobile tablet">
+
     <YellowButton
       style={{ marginBottom: "2rem" }}
       as={Link}
@@ -52,6 +57,7 @@ const HighScores = () => (
     >
       HOME
     </YellowButton>
+    </Grid.Row>
   </div>
 );
 
