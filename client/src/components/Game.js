@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
@@ -24,7 +24,15 @@ const Game = () => {
   const [correctAns, setCorrectAns] = useState([]);
   const [incorrectAns, setIncorrectAns] = useState([]);
   const [posterSrc, setPoster] = useState([]);
-  const [seqArr, setSeqArr] = useState([seq_1,seq_2,seq_3,seq_4,seq_5,seq_6])
+  const [seqArr, setSeqArr] = useState([seq_1,seq_2,seq_3,seq_4,seq_5,seq_6]);
+
+  const [second, setSecond] = useState('00');
+  const [minute, setMinute] = useState('00');
+  const [counter, setCounter] = useState(0);
+  const [isWinner, setIsWinner] = useState(false);
+  
+
+  const navigate = useNavigate();
 
   const [isStarted, setIsStarted] = useState(false);
 
@@ -33,6 +41,35 @@ const Game = () => {
   if (!token) {
     return <div id="instructions">You must be logged in to start a game!</div>;
   }
+
+  const timer = ()=>{
+    let totalSeconds = 0;
+    const current = setInterval(setTime, 1000);
+
+    function setTime() {
+      ++totalSeconds;
+      setCounter(totalSeconds);
+      setSecond(pad(totalSeconds % 60));
+      setMinute(pad(parseInt(totalSeconds / 60)));
+    }
+    function pad(val) {
+      var valString = val + "";
+      if (valString.length < 2) {
+        return "0" + valString;
+      } else {
+        return valString;
+      }
+    }
+
+    const submitButton = document.querySelector('#submit-button')
+    submitButton.addEventListener("click", ()=> {
+      if (isWinner){
+        clearInterval(current)
+      }
+    })
+
+  };
+
 
   const handleSelect = (event) => {
 
@@ -78,30 +115,48 @@ const Game = () => {
     const incorrectArr = [];
     for (let i=0; i<answerKey.length; i++){
       if (answerKey[i].movieId === Number(userAnswer[i])){
-        console.log("correct")
         correctArr.push(userAnswer[i]);
-        
-        // document.getElementById(`poster${i}`).style.backgroundColor= "#00ff00";
-
       } else {
-        incorrectArr.push(userAnswer[i])
+        incorrectArr.push(userAnswer[i]);
       }
     }
-    console.log(incorrectAns)
     setCorrectAns(correctArr);
-    setIncorrectAns(incorrectAns);
+    setIncorrectAns(incorrectArr);
 
-    for (let i=0; i<correctAns.length; i++){
+    if (correctArr.length === answerKey.length){
+      setIsWinner(true);
+      // clearInterval(current)
+      // console.log(current)
+      console.log(counter)
+      let score
+      if (counter <= 20 ){
+        score = Math.ceil((5000-(41*counter)))
+      } else if (counter > 20 && counter < 40){
+        score = Math.ceil((4160 - (.75 * counter)))
+      } else if (counter >= 40 && counter <= 60){
+        score = Math.ceil((2943 - (.75 * counter)))
+      } else {
+        score = Math.ceil((1618 - (.5 * counter)))
+      }
+      console.log(score)
+
+      return console.log('Timer should be stopped')
       
-    // setCorrect(!correctColor)
-
+      // navigate('/highscores', {replace: true}, [navigate]);
+    } else {
+      return console.log('Try again')
     }
     
   }
 
   const handleStart = async (event) => {
     event.preventDefault();
+
     setIsStarted(true);
+
+    timer();
+    
+
 
     try {
       const response = await fetchMovies();
@@ -114,7 +169,7 @@ const Game = () => {
         if (movieArr.indexOf(addMovie) === -1) {
           movieArr.push(addMovie);
         }
-      } while (movieArr.length < 6);
+      } while (movieArr.length < 3);
 
       const postersSrcFetch = movieArr.map((poster) => ({
         image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`
@@ -207,7 +262,11 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
+
       <div className="timer">TIME LEFT: </div> 
+
+      <div className="timer">TIMER: {minute}:{second}</div>
+
       <PinkButton
         className="massive ui button"
         id="start-button"
