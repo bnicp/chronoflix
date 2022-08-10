@@ -15,22 +15,6 @@ const resolvers = {
       const highscoreData = await User.find({});
       return highscoreData;
     },
-    highscores: async (parent, args) => {
-      const highscoreData = await Score.find({}).sort([
-        ["score", "descending"],
-      ]);
-      return highscoreData;
-    },
-
-    // med_highscores: async (parent, args) => {
-    //   const highscoreData = await Score.find({ difficulty: "medium" }).sort([['score', 'descending']]);
-    //     return highscoreData
-    // },
-
-    // hard_highscores: async (parent, args) => {
-    //   const highscoreData = await Score.find({ difficulty: "hard" }).sort([['score', 'descending']]);
-    //     return highscoreData
-    // }
   },
 
   Mutation: {
@@ -56,7 +40,7 @@ const resolvers = {
 
       return { token, user };
     },
-    // saveBook: async (parent, { newBook }, context) => {
+    // newScore: async (parent, { newBook }, context) => {
     //   if (context.user) {
     //     const updatedUser = await User.findByIdAndUpdate(
     //       { _id: context.user._id },
