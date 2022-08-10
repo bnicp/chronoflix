@@ -1,5 +1,3 @@
-const User = require('./User');
-// const Highscores = require('./Highscores');
-const Score = require('./Score');
+const User = require("./User");
 
-module.exports = { User, Score };
+module.exports = { User };

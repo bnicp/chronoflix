@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
@@ -91,7 +91,7 @@ const Game = () => {
     }
     console.log(incorrectAns);
     setCorrectAns(correctArr);
-    setIncorrectAns(incorrectAns);
+    setIncorrectAns(incorrectArr);
 
     for (let i = 0; i < correctAns.length; i++) {
       // setCorrect(!correctColor)
