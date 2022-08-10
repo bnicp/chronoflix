@@ -17,7 +17,6 @@ export default class Navbar extends Component {
     return (
       <Segment>
         <div className="four wide column">
-          {/* <Image src={logo} size="mini" style={{ display: "inline-block" }} /> */}
           <Image
             src={words}
             size="medium"
