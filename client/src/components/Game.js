@@ -17,12 +17,47 @@ const Game = () => {
   const [userAnswerArray, setUserAnswerArray] = useState([]);
   const [currentSelectedMovie, setCurrentSelectedMovie] = useState([]);
 
+  const [second, setSecond] = useState("00");
+  const [minute, setMinute] = useState("00");
+  const [counter, setCounter] = useState(0);
+  const [isWinner, setIsWinner] = useState(false);
+
+  const [isStarted, setIsStarted] = useState(false);
+
+  const [seed, setSeed] = useState(1);
+
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
   if (!token) {
     return <div id="instructions">You must be logged in to start a game!</div>;
   }
+  let totalSeconds = 0;
+  const timer = () => {
+    const current = setInterval(setTime, 1000);
+
+    function setTime() {
+      ++totalSeconds;
+      setCounter(totalSeconds);
+      setSecond(pad(totalSeconds % 60));
+      setMinute(pad(parseInt(totalSeconds / 60)));
+    }
+    function pad(val) {
+      var valString = val + "";
+      if (valString.length < 2) {
+        return "0" + valString;
+      } else {
+        return valString;
+      }
+    }
+
+    const submitButton = document.querySelector("#submit-button");
+    submitButton.addEventListener("click", () => {
+      if (isWinner) {
+        clearInterval(current);
+      }
+    });
+  };
 
   const handleSelect = (event) => {
     const movieId = event.target.getAttribute("data-id");
@@ -52,13 +87,44 @@ const Game = () => {
     }
 
     if (correctArr.length === answerKey.length) {
+      setIsWinner(true);
+      // clearInterval(current)
+      // console.log(current)
+      console.log(counter);
+      let score;
+      if (counter <= 20) {
+        score = Math.ceil(5000 - 41 * counter);
+      } else if (counter > 20 && counter < 40) {
+        score = Math.ceil(4160 * (0.75 * counter * 0.01));
+      } else if (counter >= 40 && counter <= 60) {
+        score = Math.ceil(2943 * (0.75 * counter * 0.01));
+      } else {
+        score = Math.ceil(1618 * (0.5 * counter));
+      }
+      console.log(score);
       navigate("/highscores", { replace: true }, [navigate]);
+      return console.log("Timer should be stopped");
     } else {
+      setSeed(Math.random());
+      setUserAnswer([]);
+      setUserAnswerSrc([]);
       return console.log("Try again");
     }
   };
 
   const handleStart = async (event) => {
+    event.preventDefault();
+    setIsStarted(true);
+    setUserAnswer([]);
+    setUserAnswerSrc([]);
+    setCorrectAns([]);
+    setIncorrectAns([]);
+    setCounter(0);
+    setSecond("00");
+    setMinute("00");
+    totalSeconds = 0;
+    timer();
+
     try {
       const response = await fetchMovies();
       const movies = await response.json();
@@ -163,7 +229,7 @@ const Game = () => {
       <div id="instructions">
         Click the poster images to place the movies in order by release year.
       </div>
-      <Grid centered style={{ marginBottom: "4rem" }}>
+      <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
         <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
@@ -171,20 +237,27 @@ const Game = () => {
           {posters}
         </Grid.Row>
       </Grid>
-      <div className="timer">TIME LEFT: </div>
+      <div className="timer">
+        TIMER: {minute}:{second}
+      </div>
+
       <PinkButton
         className="massive ui button"
         id="start-button"
         onClick={handleStart}
       >
-        START
+        {!isStarted ? "START" : "RESET"}
       </PinkButton>
-
+      {/* { !isStarted ? ( null ) : ( ) } */}
       <YellowButton
         className="massive ui button"
         id="submit-button"
-        style={{ marginBottom: "4rem" }}
+        style={{
+          marginBottom: "4rem",
+          visibility: isStarted ? "visible" : "hidden",
+        }}
         onClick={submitAnswers}
+        disabled={userAnswer.length != movieNumber}
       >
         SUBMIT
       </YellowButton>
