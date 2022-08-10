@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
 import seq_3 from "../assets/seq_numbers/seq_3.jpg";
-import seq_4 from "../assets/seq_numbers/seq_4.jpg";
-import seq_5 from "../assets/seq_numbers/seq_5.jpg";
-import seq_6 from "../assets/seq_numbers/seq_6.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
@@ -23,11 +20,9 @@ const Game = () => {
   const [correctAns, setCorrectAns] = useState([]);
   const [incorrectAns, setIncorrectAns] = useState([]);
   const [posterSrc, setPoster] = useState([]);
-  const [seqArr, setSeqArr] = useState([seq_1,seq_2,seq_3,seq_4,seq_5,seq_6]);
+  const [seqArr, setSeqArr] = useState([seq_1, seq_2, seq_3]);
 
   const navigate = useNavigate();
-
-  
 
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -36,39 +31,50 @@ const Game = () => {
   }
 
   const handleSelect = (event) => {
-
-    // const seqArr = [seq_1,seq_2,seq_3,seq_4,seq_5,seq_6];
-    const selection_id = event.target.getAttribute('data-id');
-    const selection_src = event.target.getAttribute('src');
-
+    // this is the movieid number of the selection
+    const selection_id = event.target.getAttribute("data-id");
+    // this is the image source
+    const selection_src = event.target.getAttribute("src");
+    // the full html element for the image
     const select_poster = event.target;
-    // const targetIndex = select_poster.getAttribute('data-index').value
-    // const overlay = document.getElementById(`overlay${targetIndex}`)
-    // const obj = {}
-    // obj.id = selection_id
-    // obj.src = selection_src
-    // console.log(seq_numbers)
+    // const componentRef = React.useRef(selection_id);
+    // const target = React.getElementById(selection_id);
+    // console.log(componentRef);
 
     if (
+      // if the selection is in the array and the movieId is equal to the last selection
       userAnswer.indexOf(selection_id) !== -1 &&
+      // this is checking to make sure the movie id they checked is the last one in the array
       selection_id === userAnswer[userAnswer.length - 1]
     ) {
       const originalPoster = userAnswerSrc[userAnswer.indexOf(selection_id)];
       select_poster.src = `${originalPoster}`;
       select_poster.parentElement.style.backgroundColor = "#de077d";
-      // overlay.classList.add('display')
+
       userAnswer.pop();
       userAnswerSrc.pop();
-    } else if (userAnswer.indexOf(selection_id) === -1) {
+    } else {
+      // pushes the users selection of movieId to the array
       userAnswer.push(selection_id);
+
+      // pushes the users selection of html element to the array
       userAnswerSrc.push(selection_src);
-      console.log("length" + userAnswer.length);
-      // overlay.classList.remove('display');
+
+      // console.log(mySegment.current);
+
+      // const element = React.createElement("img", { src: seq_1 });
+      // changes the source to the overlay image
+      // console.log(target.appendChild(element));
+      // <Image
+      //   style={{ borderRadius: "1rem", position: "absolute" }}
+      //   src={seq_1}
+      //   onClick={handleSelect}
+      //   className="movie-poster"
+      // />
+
       select_poster.src = `${seqArr[userAnswer.length - 1]}`;
       select_poster.parentElement.style.backgroundColor = "#fff";
     }
-
-    console.log(userAnswer);
   };
 
   const submitAnswers = (event) => {
@@ -77,8 +83,8 @@ const Game = () => {
     console.log(answerKey);
     const correctArr = [];
     const incorrectArr = [];
-    for (let i=0; i<answerKey.length; i++){
-      if (answerKey[i].movieId === Number(userAnswer[i])){
+    for (let i = 0; i < answerKey.length; i++) {
+      if (answerKey[i].movieId === Number(userAnswer[i])) {
         correctArr.push(userAnswer[i]);
       } else {
         incorrectArr.push(userAnswer[i]);
@@ -87,14 +93,12 @@ const Game = () => {
     setCorrectAns(correctArr);
     setIncorrectAns(incorrectArr);
 
-    if (correctArr.length === answerKey.length){
-      
-      navigate('/highscores', {replace: true}, [navigate]);
+    if (correctArr.length === answerKey.length) {
+      navigate("/highscores", { replace: true }, [navigate]);
     } else {
-      return console.log('Try again')
+      return console.log("Try again");
     }
-    
-  }
+  };
 
   const handleStart = async (event) => {
     event.preventDefault();
@@ -110,11 +114,11 @@ const Game = () => {
         if (movieArr.indexOf(addMovie) === -1) {
           movieArr.push(addMovie);
         }
-      } while (movieArr.length < 6);
+      } while (movieArr.length < movieNumber);
 
       const postersSrcFetch = movieArr.map((poster) => ({
-        image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`
-      }))
+        image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`,
+      }));
 
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
@@ -155,16 +159,25 @@ const Game = () => {
     >
       <Segment
         id={`poster${i}`}
-
         data-id={`${fetchedMovies[i].movieId}`}
-        style={{ backgroundColor: (correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1) ?"#00ff00" : (incorrectAns.indexOf(String(fetchedMovies[i].movieId)) !== -1)? "#ff0000" : "#de077d", borderRadius: "1rem", position:"relative" }}
-        
-        
-
+        style={{
+          backgroundColor:
+            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? "#00ff00"
+              : incorrectAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? "#ff0000"
+              : "#de077d",
+          borderRadius: "1rem",
+          position: "relative",
+        }}
       >
         <Image
-          style={{ borderRadius: "1rem" }}
-          src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          style={{ borderRadius: "1rem", position: "relative" }}
+          src={
+            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
+              : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`
+          }
           alt={`${fetchedMovies[i].title}`}
           data-id={`${fetchedMovies[i].movieId}`}
           id={`${fetchedMovies[i].movieId}`}
@@ -173,17 +186,6 @@ const Game = () => {
           onClick={handleSelect}
           className="movie-poster"
         />
-
-        {/* <Image
-          className="movie-poster"
-          style={{ borderRadius: "1rem", position: "absolute", top:"0%", left:"0%", display:"none"}}
-          src={`https://belusaweb.s3.amazonaws.com/product-images/colors/Banana_banana-squeezie-al26021-gallery-1.jpg`}
-          alt={`${fetchedMovies[i].title}`}
-          id={`overlay${[i]}`}
-          // data-src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
-          // onClick={handleSelect}
-          
-        /> */}
       </Segment>
     </Grid.Column>
   ));
@@ -213,12 +215,8 @@ const Game = () => {
       <YellowButton
         className="massive ui button"
         id="submit-button"
-
-        // as={Link}
-        // to="/highscores"
         style={{ marginBottom: "4rem" }}
         onClick={submitAnswers}
-
       >
         SUBMIT
       </YellowButton>
