@@ -78,7 +78,6 @@ h1 {
   margin-bottom: 3rem;
 }
 
-
 #start-button {
   background-color: var(--light-blue);
   color: white;
@@ -97,7 +96,6 @@ h1 {
   font-size: 2rem;
 }
 
-
 /* high score screen */
 .heading {
   margin-bottom: 4rem;
@@ -108,11 +106,11 @@ h1 {
   max-width: 80%;
 }
 
-#nav-logo {
+/* #nav-logo {
   position: absolute;
   top: 1.5rem;
   left: 2rem;
-}
+} */
 
 .logo {
   margin-top: 4rem;
@@ -129,6 +127,6 @@ h1 {
   background: #00ff00;
 }
 
-.card-poster{
+.card-poster {
   background-color: #de077d;
 }
