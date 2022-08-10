@@ -93,7 +93,7 @@ export default function Game() {
   };
 
   const handleStart = async (event) => {
-    setIsPlaying(!isPlaying);
+    setIsPlaying(true);
 
     try {
       const response = await fetchMovies();
@@ -210,7 +210,13 @@ export default function Game() {
       <div className="timer">TIME ELAPSED: {seconds}</div>
 
       {isPlaying ? (
-        <></>
+        <PinkButton
+        className="huge ui button"
+        id="start-button"
+        onClick={handleStart}
+      >
+        Reset
+      </PinkButton>
       ) : (
         <PinkButton
           className="huge ui button"
