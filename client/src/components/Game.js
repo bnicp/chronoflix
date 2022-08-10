@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
+import seq_0 from "../assets/seq_numbers/seq_0.jpg";
 import seq_1 from "../assets/seq_numbers/seq_1.jpg";
 import seq_2 from "../assets/seq_numbers/seq_2.jpg";
-import seq_3 from "../assets/seq_numbers/seq_3.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
@@ -12,18 +12,12 @@ import { PinkButton, YellowButton } from "./styledComponents";
 
 const Game = () => {
   const movieNumber = 3;
-  const [fetchedMovies, setFetchedMovies] = useState([]);
+  const [randomMovies, setRandomMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
-  const [userAnswer, setUserAnswer] = useState([]);
-  const [userAnswerSrc, setUserAnswerSrc] = useState([]);
-  const [correctColor, setCorrect] = useState(false);
-  const [correctAns, setCorrectAns] = useState([]);
-  const [incorrectAns, setIncorrectAns] = useState([]);
-  const [posterSrc, setPoster] = useState([]);
-  const [seqArr, setSeqArr] = useState([seq_1, seq_2, seq_3]);
+  const [userAnswerArray, setUserAnswerArray] = useState([]);
+  const [currentSelectedMovie, setCurrentSelectedMovie] = useState([]);
 
   const navigate = useNavigate();
-
   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
   if (!token) {
@@ -31,67 +25,31 @@ const Game = () => {
   }
 
   const handleSelect = (event) => {
-    // this is the movieid number of the selection
-    const selection_id = event.target.getAttribute("data-id");
-    // this is the image source
-    const selection_src = event.target.getAttribute("src");
-    // the full html element for the image
-    const select_poster = event.target;
-    // const componentRef = React.useRef(selection_id);
-    // const target = React.getElementById(selection_id);
-    // console.log(componentRef);
+    const movieId = event.target.getAttribute("data-id");
+    const index = event.target.getAttribute("data-index");
+    setCurrentSelectedMovie([...currentSelectedMovie, index]);
+    setUserAnswerArray([...userAnswerArray, movieId]);
+  };
 
-    if (
-      // if the selection is in the array and the movieId is equal to the last selection
-      userAnswer.indexOf(selection_id) !== -1 &&
-      // this is checking to make sure the movie id they checked is the last one in the array
-      selection_id === userAnswer[userAnswer.length - 1]
-    ) {
-      const originalPoster = userAnswerSrc[userAnswer.indexOf(selection_id)];
-      select_poster.src = `${originalPoster}`;
-      select_poster.parentElement.style.backgroundColor = "#de077d";
-
-      userAnswer.pop();
-      userAnswerSrc.pop();
-    } else {
-      // pushes the users selection of movieId to the array
-      userAnswer.push(selection_id);
-
-      // pushes the users selection of html element to the array
-      userAnswerSrc.push(selection_src);
-
-      // console.log(mySegment.current);
-
-      // const element = React.createElement("img", { src: seq_1 });
-      // changes the source to the overlay image
-      // console.log(target.appendChild(element));
-      // <Image
-      //   style={{ borderRadius: "1rem", position: "absolute" }}
-      //   src={seq_1}
-      //   onClick={handleSelect}
-      //   className="movie-poster"
-      // />
-
-      select_poster.src = `${seqArr[userAnswer.length - 1]}`;
-      select_poster.parentElement.style.backgroundColor = "#fff";
-    }
+  const handleUnselect = (event) => {
+    const movieId = event.target.getAttribute("data-id");
+    const index = event.target.getAttribute("data-index");
+    setCurrentSelectedMovie(
+      currentSelectedMovie.filter((element) => element != index)
+    );
+    setUserAnswerArray(userAnswerArray.filter((element) => element != movieId));
   };
 
   const submitAnswers = (event) => {
-    event.preventDefault();
-    console.log(userAnswer);
-    console.log(answerKey);
     const correctArr = [];
     const incorrectArr = [];
     for (let i = 0; i < answerKey.length; i++) {
-      if (answerKey[i].movieId === Number(userAnswer[i])) {
-        correctArr.push(userAnswer[i]);
+      if (answerKey[i].movieId === Number(userAnswerArray[i])) {
+        correctArr.push(userAnswerArray[i]);
       } else {
-        incorrectArr.push(userAnswer[i]);
+        incorrectArr.push(userAnswerArray[i]);
       }
     }
-    setCorrectAns(correctArr);
-    setIncorrectAns(incorrectArr);
 
     if (correctArr.length === answerKey.length) {
       navigate("/highscores", { replace: true }, [navigate]);
@@ -101,13 +59,10 @@ const Game = () => {
   };
 
   const handleStart = async (event) => {
-    event.preventDefault();
-
     try {
       const response = await fetchMovies();
       const movies = await response.json();
-
-      let movieArr = [];
+      const movieArr = [];
 
       do {
         const addMovie = movies.results[generateRandomInteger(19)];
@@ -116,76 +71,89 @@ const Game = () => {
         }
       } while (movieArr.length < movieNumber);
 
-      const postersSrcFetch = movieArr.map((poster) => ({
-        image: `https://www.themoviedb.org/t/p/w1280/${poster.poster_path}`,
-      }));
-
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
         title: movie.title,
         release_date: movie.release_date,
-        image: movie.poster_path,
+        image: `https://www.themoviedb.org/t/p/w1280/${movie.poster_path}`,
       }));
-      console.log(movieData);
-      setFetchedMovies(movieData);
-      setPoster(postersSrcFetch);
-      // console.log(fetchedMovies);
-      function compare(a, b) {
-        if (a.release_date < b.release_date) {
-          return -1;
-        }
-        if (a.release_date > b.release_date) {
-          return 1;
-        }
-        return 0;
-      }
 
-      let answerKey = movieData.map((a) => {
-        return { ...a };
-      });
-      answerKey = answerKey.sort(compare);
-      console.log(answerKey);
-      setAnswerKey(answerKey);
+      setRandomMovies(movieData);
+      const sortedArray = _.sortBy(movieData, [movieData.release_date]);
+      setAnswerKey(sortedArray.map((movieData) => movieData.movieId));
     } catch (err) {
       console.error(err);
     }
   };
 
-  const posters = _.times(fetchedMovies.length, (i) => (
+  const getImagePath = (i) => {
+    switch (i) {
+      case 0:
+        return seq_0;
+      case 1:
+        return seq_1;
+      default:
+        return seq_2;
+    }
+  };
+
+  const posters = _.times(randomMovies.length, (i) => (
     <Grid.Column
       key={i}
-      max={fetchedMovies.length}
+      max={randomMovies.length}
       style={{ margin: "1rem 0 1rem 0" }}
     >
       <Segment
         id={`poster${i}`}
-        data-id={`${fetchedMovies[i].movieId}`}
+        data-id={`${randomMovies[i].movieId}`}
         style={{
           backgroundColor:
-            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+            userAnswerArray.indexOf(String(answerKey[i])) !== -1
               ? "#00ff00"
-              : incorrectAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
+              : userAnswerArray.indexOf(String(answerKey[i])) !== -1
               ? "#ff0000"
               : "#de077d",
           borderRadius: "1rem",
           position: "relative",
+          top: "0",
+          left: "0",
         }}
       >
         <Image
-          style={{ borderRadius: "1rem", position: "relative" }}
-          src={
-            correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1
-              ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-              : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`
-          }
-          alt={`${fetchedMovies[i].title}`}
-          data-id={`${fetchedMovies[i].movieId}`}
-          id={`${fetchedMovies[i].movieId}`}
+          style={{
+            borderRadius: "1rem",
+            position: "relative",
+            top: "0",
+            left: "0",
+          }}
+          src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
+          // src={
+          //   correctAns.indexOf(String(answerKey[i].movieId)) !== -1
+          //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
+          //     : `https://www.themoviedb.org/t/p/w1280/${answerKey[i].image}`
+          // }
+          alt={`${randomMovies[i].title}`}
+          data-id={`${randomMovies[i].movieId}`}
+          id={`${randomMovies[i].movieId}`}
           data-index={`${[i]}`}
-          data-src={`https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
-          onClick={handleSelect}
+          data-src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
           className="movie-poster"
+          onClick={handleSelect}
         />
+        <Image
+          src={getImagePath(i)}
+          data-index={`${[i]}`}
+          data-id={`${randomMovies[i].movieId}`}
+          style={{
+            borderRadius: "1rem",
+            position: "absolute",
+            top: "0",
+            left: "0",
+            opacity: "0.85",
+            display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
+          }}
+          onClick={handleUnselect}
+        ></Image>
       </Segment>
     </Grid.Column>
   ));
