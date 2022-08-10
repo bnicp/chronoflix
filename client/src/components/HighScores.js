@@ -40,7 +40,7 @@ const HighScores = () => (
       style={{ marginBottom: "2rem" }}
       as={Link}
       to="/game"
-      className="massive ui button"
+      className="huge ui button"
     >
       NEW GAME
     </PinkButton>
@@ -48,7 +48,7 @@ const HighScores = () => (
       style={{ marginBottom: "2rem" }}
       as={Link}
       to="/"
-      className="massive ui button"
+      className="huge ui button"
     >
       HOME
     </YellowButton>

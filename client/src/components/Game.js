@@ -213,7 +213,7 @@ export default function Game() {
         <></>
       ) : (
         <PinkButton
-          className="massive ui button"
+          className="huge ui button"
           id="start-button"
           onClick={handleStart}
         >
@@ -222,7 +222,7 @@ export default function Game() {
       )}
       {isPlaying ? (
         <YellowButton
-          className="massive ui button"
+          className="huge ui button"
           id="submit-button"
           style={{
             marginBottom: "4rem",
