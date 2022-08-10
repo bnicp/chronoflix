@@ -29,6 +29,8 @@ const Game = () => {
   const [minute, setMinute] = useState('00');
   const [counter, setCounter] = useState(0);
   const [isWinner, setIsWinner] = useState(false);
+
+  const [seed, setSeed] = useState(1);
   
 
   const navigate = useNavigate();
@@ -143,6 +145,9 @@ const Game = () => {
       
       // navigate('/highscores', {replace: true}, [navigate]);
     } else {
+        setSeed(Math.random());
+        setUserAnswer([]);
+        setUserAnswerSrc([]);
       return console.log('Try again')
     }
     
@@ -218,7 +223,7 @@ const Game = () => {
       >
         <Image
           style={{ borderRadius: "1rem" }}
-          src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
+          src={ correctAns.indexOf(String(fetchedMovies[i].movieId)) !== -1 ? `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}` : `https://www.themoviedb.org/t/p/w1280/${fetchedMovies[i].image}`}
           alt={`${fetchedMovies[i].title}`}
           data-id={`${fetchedMovies[i].movieId}`}
           id={`${fetchedMovies[i].movieId}`}
@@ -247,7 +252,7 @@ const Game = () => {
       <div id="instructions">
         Click the poster images to place the movies in order by release year.
       </div>
-      <Grid centered style={{ marginBottom: "4rem" }}>
+      <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
         <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
