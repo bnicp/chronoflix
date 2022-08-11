@@ -24,3 +24,13 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const ADD_SCORE = gql`
+  mutation newScore($highScore: Int!) {
+    newScore(highScore: $highScore) 
+    {
+        username
+        highScore
+    }
+  }
+`;
