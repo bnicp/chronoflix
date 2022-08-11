@@ -9,11 +9,11 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
-import { useMutation } from '@apollo/client';
-import { ADD_SCORE } from '../utils/mutations';
+import { useMutation } from "@apollo/client";
+import { ADD_SCORE } from "../utils/mutations";
 
 export default function Game() {
-  const movieNumber = 4;
+  const movieNumber = 3;
   const [randomMovies, setRandomMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswerArray, setUserAnswerArray] = useState([]);
@@ -50,7 +50,7 @@ export default function Game() {
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie([...currentSelectedMovie, index]);
     setUserAnswerArray([...userAnswerArray, movieId]);
-    console.log(userAnswerArray);
+    // console.log(userAnswerArray);
   };
 
   const handleUnselect = (event) => {
@@ -89,10 +89,9 @@ export default function Game() {
       // }
 
       try {
-        const { data } = await saveScore({ 
-          variables: { highScore: score }, 
+        const { data } = await saveScore({
+          variables: { highScore: score },
         });
-  
       } catch (err) {
         console.error(err);
       }
@@ -216,7 +215,7 @@ export default function Game() {
       </div>
       {/* is seed necessary for the key? */}
       <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
-        <Grid.Row columns={2} only="mobile tablet" style={{ maxWidth: "80%" }}>
+        <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
         <Grid.Row columns={movieNumber * 2} only="computer">
