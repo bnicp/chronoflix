@@ -18,8 +18,8 @@ ChronoFlix is a mobile game where registered users sort random movies by release
 
 ## Installation
 
-To run the site, visit:
-Please refer to the GitHub repo:
+To run the site, visit: https://chronoflix.herokuapp.com
+Please refer to the GitHub repo: https://github.com/bnicp/chronoflix
 
 ## Usage
 
@@ -32,6 +32,7 @@ To Play
 5. Keep trying to beat your own record and attain the universal high score.
 
 Screenshot of the home page:
+![Demo of the project.](./src/assets/home_page.jpg)
 
 ## License
 
@@ -40,8 +41,11 @@ Apache 2.0 License [![License](https://img.shields.io/badge/License-Apache_2.0-b
 ## Credits
 
 Heather Noyes: https://github.com/heatherknoyes
+
 Chris Ginn: https://github.com/christopherginn
+
 Andrew Bungcayao: https://github.com/Bungycode
+
 Brandi Peters: https://github.com/bnicp
 
 ## Contribute
@@ -50,10 +54,9 @@ Fork the repository and contact us about any code you're interested in pushing f
 
 ## Tests
 
-Test the site at:
+Test the site at: https://chronoflix.herokuapp.com
 
 ## Questions
 
 Send questions to --
-Email: bnp415@gmail.com
 Github: Any contributor above.
