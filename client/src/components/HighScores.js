@@ -3,17 +3,45 @@ import { Link } from "react-router-dom";
 import { Grid, Button } from "semantic-ui-react";
 import { PinkButton, YellowButton } from "./styledComponents";
 
+import { useQuery} from '@apollo/client';
+import { GET_ALLUSERS } from '../utils/queries';
+
 const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
-const scores = colors.map((color, i) => (
-  <Grid.Row style={{ color: `${color}` }} key={color} centered columns={3}>
-    <Grid.Column>{i + 1}</Grid.Column>
-    <Grid.Column>USERNAME</Grid.Column>
-    <Grid.Column>SCORE</Grid.Column>
-  </Grid.Row>
-));
+const HighScores = () => {
 
-const HighScores = () => (
+const { loading, data } =useQuery(GET_ALLUSERS);
+// console.log(data)
+// const userData = data?.allUsers || {};
+const getScores = (data2) => {
+console.log(data2)
+if(!loading){
+  const scores = colors.map((color, i) => (
+    <Grid.Row style={{ color: `${color}` }} key={color} centered columns={3}>
+      <Grid.Column>{i + 1}</Grid.Column>
+      <Grid.Column>{data2.allUsers[i].username}</Grid.Column>
+      <Grid.Column>SCORE</Grid.Column>
+    </Grid.Row>
+  ));
+
+return scores
+}
+}
+
+
+// const scores = colors.map((color, i) => (
+//   <Grid.Row style={{ color: `${color}` }} key={color} centered columns={3}>
+//     <Grid.Column>{i + 1}</Grid.Column>
+//     <Grid.Column>username</Grid.Column>
+//     <Grid.Column>SCORE</Grid.Column>
+//   </Grid.Row>
+// ));
+
+// if (loading) {
+//   return <h2>LOADING...</h2>;
+// }
+// const HighScores = () => (
+  return (
   <div id="high-scores">
     <div className="heading">
       <h1 style={{ color: "white" }}>HIGH SCORES</h1>
@@ -30,7 +58,7 @@ const HighScores = () => (
         <Grid.Column>USERNAME</Grid.Column>
         <Grid.Column>SCORE</Grid.Column>
       </Grid.Row>
-      {scores}
+      {getScores(data)}
     </Grid>
     <div className="current-user-scores" style={{ marginBottom: "2rem" }}>
       <h1 style={{ color: "white" }}>YOUR SCORE</h1>
@@ -54,5 +82,6 @@ const HighScores = () => (
     </YellowButton>
   </div>
 );
+}
 
 export default HighScores;
