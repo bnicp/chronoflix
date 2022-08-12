@@ -21,6 +21,8 @@ export default function Game() {
   const [seconds, setSeconds] = useState(0);
   const [clickCounter, setClickCounter] = useState(1);
   const [seed, setSeed] = useState(1);
+  const [correctAns, setCorrectAns] = useState([]);
+  const [incorrectAns, setIncorrectAns] = useState([]);
   const [numberArray, setNumberArray] = useState(
     new Array(movieNumber).fill(0)
   );
@@ -68,6 +70,8 @@ export default function Game() {
   };
 
   const submitAnswers = async (event) => {
+    const correctArr = [];
+    const incorrectArr = [];
     let counter = 0;
     let i = 0;
     // stopCounting();
@@ -75,9 +79,14 @@ export default function Game() {
     while (i < answerKey.length) {
       if (answerKey[i].toString() === userAnswerArray[i]) {
         counter++;
+        correctArr.push(userAnswerArray[i])
+      } else {
+        incorrectArr.push(userAnswerArray[i])
       }
       i++;
     }
+    setCorrectAns(correctArr);
+    setIncorrectAns(incorrectArr);
 
     if (counter == answerKey.length) {
       setIsPlaying(false);
@@ -118,8 +127,11 @@ export default function Game() {
       navigate("/highscores", { replace: true }, [navigate]);
 
     } else {
-      // Resets posters to how they were before user selects sequence
+      // Reloads posters to how they were before user selects sequence
       setSeed(Math.random());
+      // Removes sequence numbers
+      handleUnselect();
+
 
       // Make this a disappearing modal or something?
       return console.log("Try again");
@@ -179,9 +191,9 @@ export default function Game() {
         data-id={`${randomMovies[i].movieId}`}
         style={{
           backgroundColor:
-            userAnswerArray.indexOf(String(answerKey[i])) !== -1
+            correctAns.indexOf(String(randomMovies[i].movieId)) !== -1
               ? "#00ff00"
-              : userAnswerArray.indexOf(String(answerKey[i])) !== -1
+              : incorrectAns.indexOf(String(randomMovies[i].movieId)) !== -1
               ? "#ff0000"
               : "#de077d",
           borderRadius: "1rem",
@@ -244,7 +256,7 @@ export default function Game() {
         Click the poster images to place the movies in order by release year.
       </div>
       {/* is seed necessary for the key? */}
-      <Grid key={seed} centered style={{ marginBottom: "4rem" }}>
+      <Grid centered style={{ marginBottom: "4rem" }}>
         <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
@@ -252,7 +264,7 @@ export default function Game() {
           {posters}
         </Grid.Row>
       </Grid>
-      <div className="timer">TIME ELAPSED: {seconds}</div>
+      <div className="timer">TIME ELAPSED: {parseInt(seconds / 60)}:{(String((seconds % 60)).length == 1)? "0" + seconds % 60: seconds % 60}</div>
 
       {isPlaying ? (
         <></>
