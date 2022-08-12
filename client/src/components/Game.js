@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, componentDidUpdate } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
-import IMAGES from "../assets/seq_numbers/index";
-import seq_0 from "../assets/seq_numbers/seq_0.jpg";
-import seq_1 from "../assets/seq_numbers/seq_1.jpg";
-import seq_2 from "../assets/seq_numbers/seq_2.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
@@ -21,13 +17,17 @@ export default function Game() {
   const [isWinner, setIsWinner] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [seconds, setSeconds] = useState(0);
-
+  const [clickCounter, setClickCounter] = useState(1);
   const [seed, setSeed] = useState(1);
+  const [numberArray, setNumberArray] = useState(
+    new Array(movieNumber).fill(0)
+  );
 
   const [saveScore, { error }] = useMutation(ADD_SCORE);
 
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
+  const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
   useEffect(() => {
     let interval;
@@ -46,20 +46,22 @@ export default function Game() {
   }
 
   const handleSelect = (event) => {
+    // these don't matter except for state
     const movieId = event.target.getAttribute("data-id");
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie([...currentSelectedMovie, index]);
     setUserAnswerArray([...userAnswerArray, movieId]);
-    // console.log(userAnswerArray);
+    numberArray[index] = clickCounter;
+    setNumberArray(numberArray);
+
+    setClickCounter((clickCounter) => clickCounter + 1);
   };
 
   const handleUnselect = (event) => {
-    const movieId = event.target.getAttribute("data-id");
-    const index = event.target.getAttribute("data-index");
-    setCurrentSelectedMovie(
-      currentSelectedMovie.filter((element) => element != index)
-    );
-    setUserAnswerArray(userAnswerArray.filter((element) => element != movieId));
+    setCurrentSelectedMovie([]);
+    setUserAnswerArray([]);
+    setClickCounter(1);
+    setNumberArray(new Array(movieNumber).fill(0));
   };
 
   const submitAnswers = async (event) => {
@@ -106,6 +108,16 @@ export default function Game() {
     }
   };
 
+  function compare(a, b) {
+    if (a.release_date < b.release_date) {
+      return -1;
+    }
+    if (a.release_date > b.release_date) {
+      return 1;
+    }
+    return 0;
+  }
+
   const handleStart = async (event) => {
     setIsPlaying(!isPlaying);
 
@@ -124,26 +136,17 @@ export default function Game() {
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
         title: movie.title,
-        release_date: movie.release_date,
+        release_date: new Date(movie.release_date),
         image: `https://www.themoviedb.org/t/p/w1280/${movie.poster_path}`,
       }));
 
-      setRandomMovies(movieData);
-      const sortedArray = _.sortBy(movieData, [movieData.release_date]);
-      setAnswerKey(sortedArray.map((movieData) => movieData.movieId));
+      const deepCopy = _.cloneDeep(movieData);
+      movieData.sort(compare);
+      setRandomMovies(deepCopy);
+      setAnswerKey(movieData.map((movieData) => movieData.movieId));
+      console.log(movieData);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const getImagePath = (i) => {
-    switch (i) {
-      case 0:
-        return seq_0;
-      case 1:
-        return seq_1;
-      default:
-        return seq_2;
     }
   };
 
@@ -178,9 +181,9 @@ export default function Game() {
           }}
           src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
           // src={
-          //   correctAns.indexOf(String(answerKey[i].movieId)) !== -1
+          //   userAnswerArray.indexOf(String(answerKey[i].movieId)) !== -1
           //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-          //     : `https://www.themoviedb.org/t/p/w1280/${answerKey[i].image}`
+          //     : answerKey[i].image
           // }
           alt={`${randomMovies[i].title}`}
           data-id={`${randomMovies[i].movieId}`}
@@ -190,20 +193,29 @@ export default function Game() {
           className="movie-poster"
           onClick={handleSelect}
         />
-        <Image
-          src={getImagePath(i)}
+        <h1
+          id={`overlay${i}`}
           data-index={`${[i]}`}
           data-id={`${randomMovies[i].movieId}`}
           style={{
             borderRadius: "1rem",
             position: "absolute",
-            top: "0",
+            top: "-.5rem",
             left: "0",
+            color: "white",
             opacity: "0.85",
+            width: "100%",
+            height: "100%",
+            backgroundColor: colors[i],
+            textAlign: "center",
+            padding: "50% 0",
+            fontSize: "10rem",
             display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
           }}
           onClick={handleUnselect}
-        ></Image>
+        >
+          {numberArray[i]}
+        </h1>
       </Segment>
     </Grid.Column>
   ));
