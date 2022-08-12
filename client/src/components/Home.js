@@ -7,7 +7,7 @@ import { YellowButton, OrangeButton, PinkButton } from "./styledComponents";
 
 const NewGame = () => (
   <>
-    <div className="logo" only="mobile tablet" style={{ maxWidth: "80%", marginLeft:"10%" }}>
+    <div className="logo" style={{ maxWidth: "80%", marginLeft:"10%" }}>
       <Image src={cf_logo} size="big" centered />
     </div>
     <div className="new-game">

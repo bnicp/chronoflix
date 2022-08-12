@@ -47,18 +47,6 @@ const HighScores = () => (
     >
       NEW GAME
     </PinkButton>
-    {/* </Grid.Row> */}
-    {/* <Grid.Row> */}
-
-    <YellowButton
-      style={{ marginBottom: "2rem", fontSize:"1rem" }}
-      as={Link}
-      to="/"
-      className="huge ui button"
-      only="mobile" 
-    >
-      HOME
-    </YellowButton>
     </Grid.Row>
   </div>
 );

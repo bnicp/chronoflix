@@ -84,7 +84,6 @@ h1 {
   border: 3px solid var(--light-blue);
   border-radius: 0.25rem;
   padding: 2rem 0;
-  font-size: 2rem;
 }
 
 #submit-button {
@@ -93,7 +92,6 @@ h1 {
   border: 3px solid var(--orange);
   border-radius: 0.25rem;
   padding: 2rem 0;
-  font-size: 2rem;
 }
 
 /* high score screen */
