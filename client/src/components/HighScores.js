@@ -1,93 +1,66 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Segment } from "semantic-ui-react";
 import { PinkButton, YellowButton } from "./styledComponents";
-
-import { useQuery} from '@apollo/client';
-import { GET_ALLUSERS } from '../utils/queries';
 
 const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
-const HighScores = () => {
+const scores = colors.map((color, i) => (
+  <Grid.Row style={{ color: `${color}` }} key={color}>
+    <Grid.Column width={4}>{i + 1}</Grid.Column>
+    <Grid.Column width={7}>USERNAME</Grid.Column>
+    <Grid.Column>SCORE</Grid.Column>
+  </Grid.Row>
+));
 
-const { loading, data } =useQuery(GET_ALLUSERS);
-// console.log(data)
-// const userData = data?.allUsers || {};
-const getScores = (data2) => {
-console.log(data2)
-if(!loading){
-  const scores = colors.map((color, i) => (
-    <Grid.Row style={{ color: `${color}` }} key={color} centered columns={3}>
-      <Grid.Column>{i + 1}</Grid.Column>
-      <Grid.Column>{data2.allUsers[i].username}</Grid.Column>
-      <Grid.Column>SCORE</Grid.Column>
-    </Grid.Row>
-  ));
-
-return scores
-}
-}
-
-
-// const scores = colors.map((color, i) => (
-//   <Grid.Row style={{ color: `${color}` }} key={color} centered columns={3}>
-//     <Grid.Column>{i + 1}</Grid.Column>
-//     <Grid.Column>username</Grid.Column>
-//     <Grid.Column>SCORE</Grid.Column>
-//   </Grid.Row>
-// ));
-
-// if (loading) {
-//   return <h2>LOADING...</h2>;
-// }
-// const HighScores = () => (
-  return (
+const HighScores = () => (
   <div id="high-scores">
-    <div className="heading">
-      <h3 style={{ color: "white" }}>HIGH SCORES</h3>
+    <div className="">
+      <h3 style={{ color: "white", margin: "2rem 0" }}>HIGH SCORES</h3>
     </div>
     <Grid
       textAlign="center"
       columns="equal"
       centered
       className="universal-scores"
-      style={{ margin: "0 0 2rem 2rem", fontSize: "1rem" }}
+      style={{ margin: "0 0 2rem 5%", fontSize: "1rem" }}
     >
-      <Grid.Row style={{ color: "white"}} centered columns={3}>
-        <Grid.Column>PLACE</Grid.Column>
-        <Grid.Column>USERNAME</Grid.Column>
+      <Grid.Row style={{ color: "white" }}>
+        <Grid.Column width={4}>RANK</Grid.Column>
+        <Grid.Column width={7}>USERNAME</Grid.Column>
         <Grid.Column>SCORE</Grid.Column>
       </Grid.Row>
-      {getScores(data)}
+      {scores}
     </Grid>
-    <div className="current-user-scores" style={{ marginBottom: "2rem" }}>
+    <div className="current-user-scores">
       <h4 style={{ color: "white" }}>YOUR SCORE</h4>
       <h4 style={{ color: "white" }}>TIME: {20 * 60} SECONDS</h4>
     </div>
 
-    <Grid.Row columns={1} only="mobile tablet">
+    <Grid.Row>
     <PinkButton
-      style={{ marginBottom: "2rem" }}
       as={Link}
       to="/game"
       className="huge ui button"
+      style= {{ fontSize:"1rem" }}
+      only="mobile" 
     >
       NEW GAME
     </PinkButton>
-    </Grid.Row>
-    <Grid.Row columns={1} only="mobile tablet">
+    {/* </Grid.Row> */}
+    {/* <Grid.Row> */}
 
     <YellowButton
-      style={{ marginBottom: "2rem" }}
+      style={{ marginBottom: "2rem", fontSize:"1rem" }}
       as={Link}
       to="/"
       className="huge ui button"
+      only="mobile" 
     >
       HOME
     </YellowButton>
     </Grid.Row>
   </div>
 );
-}
 
 export default HighScores;
