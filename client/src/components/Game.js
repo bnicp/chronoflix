@@ -61,14 +61,19 @@ export default function Game() {
   };
 
   const handleUnselect = (event) => {
-    const movieId = event.target.getAttribute("data-id");
-    const index = event.target.getAttribute("data-index");
-    setCurrentSelectedMovie(
-      currentSelectedMovie.filter((element) => element !== index)
-    );
-    setUserAnswerArray(
-      userAnswerArray.filter((element) => element !== movieId)
-    );
+    setCurrentSelectedMovie([]);
+    setUserAnswerArray([]);
+    // for (let i = 0; i < answerKey.length; i++) {
+    //   document.getElementById(`overlay${i}`).style.display = "none";
+    // }
+    // const movieId = event.target.getAttribute("data-id");
+    // const index = event.target.getAttribute("data-index");
+    // setCurrentSelectedMovie(
+    //   currentSelectedMovie.filter((element) => element !== index)
+    // );
+    // setUserAnswerArray(
+    //   userAnswerArray.filter((element) => element !== movieId)
+    // );
   };
 
   const submitAnswers = async (event) => {
@@ -212,6 +217,7 @@ export default function Game() {
           onClick={handleSelect}
         />
         <Image
+          id={`overlay${i}`}
           src={getImagePath(i)}
           data-index={`${[i]}`}
           data-id={`${randomMovies[i].movieId}`}
