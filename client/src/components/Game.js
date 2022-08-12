@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, componentDidUpdate } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import IMAGES from "../assets/seq_numbers/index";
@@ -49,7 +49,14 @@ export default function Game() {
     const movieId = event.target.getAttribute("data-id");
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie([...currentSelectedMovie, index]);
-    setUserAnswerArray([...userAnswerArray, movieId]);
+    setUserAnswerArray([...userAnswerArray, movieId], () => {
+      // not hitting the first click because it isn't in state yet so I want to get the first element
+      for (let i = 0; i < userAnswerArray.length; i++) {
+        const currentElement = document.getElementById(userAnswerArray[i]);
+        console.log(currentElement);
+      }
+    });
+
     // console.log(userAnswerArray);
   };
 
@@ -57,9 +64,11 @@ export default function Game() {
     const movieId = event.target.getAttribute("data-id");
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie(
-      currentSelectedMovie.filter((element) => element != index)
+      currentSelectedMovie.filter((element) => element !== index)
     );
-    setUserAnswerArray(userAnswerArray.filter((element) => element != movieId));
+    setUserAnswerArray(
+      userAnswerArray.filter((element) => element !== movieId)
+    );
   };
 
   const submitAnswers = async (event) => {
@@ -106,6 +115,16 @@ export default function Game() {
     }
   };
 
+  function compare(a, b) {
+    if (a.release_date < b.release_date) {
+      return -1;
+    }
+    if (a.release_date > b.release_date) {
+      return 1;
+    }
+    return 0;
+  }
+
   const handleStart = async (event) => {
     setIsPlaying(!isPlaying);
 
@@ -124,13 +143,15 @@ export default function Game() {
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
         title: movie.title,
-        release_date: movie.release_date,
+        release_date: new Date(movie.release_date),
         image: `https://www.themoviedb.org/t/p/w1280/${movie.poster_path}`,
       }));
 
-      setRandomMovies(movieData);
-      const sortedArray = _.sortBy(movieData, [movieData.release_date]);
-      setAnswerKey(sortedArray.map((movieData) => movieData.movieId));
+      const deepCopy = _.cloneDeep(movieData);
+      movieData.sort(compare);
+      setRandomMovies(deepCopy);
+      setAnswerKey(movieData.map((movieData) => movieData.movieId));
+      console.log(movieData);
     } catch (err) {
       console.error(err);
     }
