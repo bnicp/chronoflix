@@ -7,7 +7,7 @@ import { YellowButton, OrangeButton, PinkButton } from "./styledComponents";
 
 const NewGame = () => (
   <>
-    <div className="logo" only="mobile tablet" style={{ maxWidth: "80%", marginLeft:"10%" }}>
+    <div className="logo" style={{ maxWidth: "80%", marginLeft:"10%" }}>
       <Image src={cf_logo} size="big" centered />
     </div>
     <div className="new-game">
@@ -26,7 +26,7 @@ const NewGame = () => (
         </YellowButton>
       </div>
       <div className="make-selection">
-        <PinkButton as={Link} to="/highscores" className="huge ui button">
+        <PinkButton as={Link} to="/highscores" className="huge ui button" style={{ marginBottom: "2rem" }}>
           HIGH SCORES
         </PinkButton>
       </div>

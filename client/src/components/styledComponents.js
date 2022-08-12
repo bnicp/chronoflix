@@ -7,7 +7,7 @@ export const CustomButton = styled(Button)`
   width: 45% !important;
   margin-top: 3rem !important;
   &:hover {
-    color: white !important;
+  color: white !important;
   }
 `;
 

@@ -8,7 +8,7 @@ export const fetchMovies = () => {
       process.env.REACT_APP_API_KEY
     }&page=${generateRandomPage(
       500
-    )}&language=en-US&primary_release_date.gte=2011&primary_release_date.lte=2020`
+    )}&with_original_language=en&include_adult=false&primary_release_date.gte=1985`
   );
 };
 
