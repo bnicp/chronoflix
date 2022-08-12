@@ -5,8 +5,10 @@ import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ADD_SCORE } from "../utils/mutations";
+import { GET_ME } from "../utils/queries";
+import { saveCurrScore, saveCurrTime } from "../utils/localStorage";
 
 export default function Game() {
   const movieNumber = 3;
@@ -24,6 +26,7 @@ export default function Game() {
   );
 
   const [saveScore, { error }] = useMutation(ADD_SCORE);
+  const { loading, data } = useQuery(GET_ME);
 
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -79,26 +82,41 @@ export default function Game() {
     if (counter == answerKey.length) {
       setIsPlaying(false);
       setIsWinner(true);
-      const score = generateRandomInteger(2000);
-      // if (counter <= 20) {
-      //   score = Math.ceil(5000 - 41 * counter);
-      // } else if (counter > 20 && counter < 40) {
-      //   score = Math.ceil(4160 * (0.75 * counter * 0.01));
-      // } else if (counter >= 40 && counter <= 60) {
-      //   score = Math.ceil(2943 * (0.75 * counter * 0.01));
-      // } else {
-      //   score = Math.ceil(1618 * (0.5 * counter));
-      // }
+      
+      // Calculates score based on time intervals
+      let score;
 
+      if (seconds <= 20) {
+        score = Math.ceil(5000 - 75 * seconds);
+      } else if (seconds > 20 && seconds <= 40) {
+        score = Math.ceil(3500 - (3500 * (0.009 * seconds)));
+      } else if (seconds > 40 && seconds <= 60) {
+        score = Math.ceil(2240 - (2240 * (0.008 * seconds)));
+      } else if (seconds > 60 && seconds <= 90) {
+        score = Math.ceil(1165 - (1165 * (0.007 * seconds)));
+      } else {
+        score = Math.ceil(431 - (431* (.004 * seconds)));
+      }
+
+      // Save to local storage for highscore screen
+      saveCurrScore(score);
+      saveCurrTime(seconds);
+
+      // Pulls highscore from logged in user,
+      // New score will replace queried highScore if it's greater
       try {
-        const { data } = await saveScore({
-          variables: { highScore: score },
-        });
+        if (data.me.highScore < score){
+          const { data } = await saveScore({
+            variables: { highScore: score },
+          });
+        };
       } catch (err) {
         console.error(err);
       }
 
+      // Directs to Highscore page
       navigate("/highscores", { replace: true }, [navigate]);
+
     } else {
       // Resets posters to how they were before user selects sequence
       setSeed(Math.random());
