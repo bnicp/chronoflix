@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Button, Segment } from "semantic-ui-react";
+import { Grid, Button } from "semantic-ui-react";
 import { PinkButton, YellowButton } from "./styledComponents";
 
 import { useQuery} from '@apollo/client';
@@ -64,18 +64,6 @@ return (
     >
       NEW GAME
     </PinkButton>
-    {/* </Grid.Row> */}
-    {/* <Grid.Row> */}
-
-    <YellowButton
-      style={{ marginBottom: "2rem", fontSize:"1rem" }}
-      as={Link}
-      to="/"
-      className="huge ui button"
-      only="mobile" 
-    >
-      HOME
-    </YellowButton>
     </Grid.Row>
   </div>
 );
