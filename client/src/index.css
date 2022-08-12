@@ -61,7 +61,7 @@ h1 {
 }
 
 #instructions {
-  margin: 2rem 0 2rem 0;
+  margin: 3rem;
   color: white;
 }
 
@@ -95,9 +95,6 @@ h1 {
 }
 
 /* high score screen */
-.heading {
-  margin-bottom: 4rem;
-}
 
 #all,
 #one {

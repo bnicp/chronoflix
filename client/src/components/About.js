@@ -5,18 +5,18 @@ import { Link } from "react-router-dom";
 import { PinkButton, YellowButton } from "./styledComponents";
 
 const About = () => (
-  <Container style={{ color: "white", marginTop: "4rem" }} text>
+  <Container text style={{ color: "white", marginTop: "4rem" }} >
     <Header as="h2" style={{ color: "white" }}>
       About ChronoFlix
     </Header>
-    <p>
+    <p style={{ maxWidth:"90%", marginLeft:"5%" }}>
       Built by a team of non-movie aficionados, ChronoFlix was built because of
       a mutual frustration of not knowing what movies people were talking about.
       We built ChronoFlix in order to be better trivia teammates to our friends,
       have general knowledge in conversation, and indulge and overall curiosity about
       movies.
     </p>
-    <p>
+    <p style={{ maxWidth:"90%", marginLeft:"5%" }}>
       This game is built on data sourced from TMDb. Using GraphQL we have a
       responsive and quick design that results in a pleasing experience for
       players. It is also backed by MongoDB, Javascript, and many node packages.

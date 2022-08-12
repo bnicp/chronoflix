@@ -38,7 +38,6 @@ return (
     <Grid
       textAlign="center"
       columns="equal"
-      centered
       className="universal-scores"
       style={{ margin: "0 0 2rem 5%", fontSize: "1rem" }}
     >
@@ -59,7 +58,7 @@ return (
       as={Link}
       to="/game"
       className="huge ui button"
-      style= {{ fontSize:"1rem" }}
+      style= {{ fontSize:"1rem", marginBottom:"2rem" }}
       only="mobile" 
     >
       NEW GAME
