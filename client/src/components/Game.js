@@ -1,6 +1,6 @@
-import React, { useState, useEffect, componentDidUpdate } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
@@ -16,7 +16,6 @@ export default function Game() {
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswerArray, setUserAnswerArray] = useState([]);
   const [currentSelectedMovie, setCurrentSelectedMovie] = useState([]);
-  const [isWinner, setIsWinner] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [clickCounter, setClickCounter] = useState(1);
@@ -74,14 +73,13 @@ export default function Game() {
     const incorrectArr = [];
     let counter = 0;
     let i = 0;
-    // stopCounting();
 
     while (i < answerKey.length) {
       if (answerKey[i].toString() === userAnswerArray[i]) {
         counter++;
-        correctArr.push(userAnswerArray[i])
+        correctArr.push(userAnswerArray[i]);
       } else {
-        incorrectArr.push(userAnswerArray[i])
+        incorrectArr.push(userAnswerArray[i]);
       }
       i++;
     }
@@ -90,21 +88,20 @@ export default function Game() {
 
     if (counter == answerKey.length) {
       setIsPlaying(false);
-      setIsWinner(true);
-      
+
       // Calculates score based on time intervals
       let score;
 
       if (seconds <= 20) {
         score = Math.ceil(5000 - 75 * seconds);
       } else if (seconds > 20 && seconds <= 40) {
-        score = Math.ceil(3500 - (3500 * (0.009 * seconds)));
+        score = Math.ceil(3500 - 3500 * (0.009 * seconds));
       } else if (seconds > 40 && seconds <= 60) {
-        score = Math.ceil(2240 - (2240 * (0.008 * seconds)));
+        score = Math.ceil(2240 - 2240 * (0.008 * seconds));
       } else if (seconds > 60 && seconds <= 90) {
-        score = Math.ceil(1165 - (1165 * (0.007 * seconds)));
+        score = Math.ceil(1165 - 1165 * (0.007 * seconds));
       } else {
-        score = Math.ceil(431 - (431* (.004 * seconds)));
+        score = Math.ceil(431 - 431 * (0.004 * seconds));
       }
 
       // Save to local storage for highscore screen
@@ -114,24 +111,22 @@ export default function Game() {
       // Pulls highscore from logged in user,
       // New score will replace queried highScore if it's greater
       try {
-        if (data.me.highScore < score){
+        if (data.me.highScore < score) {
           const { data } = await saveScore({
             variables: { highScore: score },
           });
-        };
+        }
       } catch (err) {
         console.error(err);
       }
 
       // Directs to Highscore page
       navigate("/highscores", { replace: true }, [navigate]);
-
     } else {
       // Reloads posters to how they were before user selects sequence
       setSeed(Math.random());
       // Removes sequence numbers
       handleUnselect();
-
 
       // Make this a disappearing modal or something?
       return console.log("Try again");
@@ -264,7 +259,10 @@ export default function Game() {
           {posters}
         </Grid.Row>
       </Grid>
-      <div className="timer">TIME ELAPSED: {parseInt(seconds / 60)}:{(String((seconds % 60)).length == 1)? "0" + seconds % 60: seconds % 60}</div>
+      <div className="timer">
+        TIME ELAPSED: {parseInt(seconds / 60)}:
+        {String(seconds % 60).length == 1 ? "0" + (seconds % 60) : seconds % 60}
+      </div>
 
       {isPlaying ? (
         <></>
