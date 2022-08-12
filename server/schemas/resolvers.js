@@ -12,7 +12,7 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     allUsers: async (parent, args) => {
-      const highscoreData = await User.find({});
+      const highscoreData = await User.find({}).sort([['highScore', 'descending']]);
       return highscoreData;
     },
   },

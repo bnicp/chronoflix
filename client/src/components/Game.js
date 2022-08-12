@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, componentDidUpdate } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
-import IMAGES from "../assets/seq_numbers/index";
-import seq_0 from "../assets/seq_numbers/seq_0.jpg";
-import seq_1 from "../assets/seq_numbers/seq_1.jpg";
-import seq_2 from "../assets/seq_numbers/seq_2.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
 import { PinkButton, YellowButton } from "./styledComponents";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ADD_SCORE } from "../utils/mutations";
+import { GET_ME } from "../utils/queries";
+import { saveCurrScore, saveCurrTime } from "../utils/localStorage";
 
 export default function Game() {
   const movieNumber = 3;
@@ -21,13 +19,18 @@ export default function Game() {
   const [isWinner, setIsWinner] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [seconds, setSeconds] = useState(0);
-
+  const [clickCounter, setClickCounter] = useState(1);
   const [seed, setSeed] = useState(1);
+  const [numberArray, setNumberArray] = useState(
+    new Array(movieNumber).fill(0)
+  );
 
   const [saveScore, { error }] = useMutation(ADD_SCORE);
+  const { loading, data } = useQuery(GET_ME);
 
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
+  const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
   useEffect(() => {
     let interval;
@@ -46,20 +49,22 @@ export default function Game() {
   }
 
   const handleSelect = (event) => {
+    // these don't matter except for state
     const movieId = event.target.getAttribute("data-id");
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie([...currentSelectedMovie, index]);
     setUserAnswerArray([...userAnswerArray, movieId]);
-    // console.log(userAnswerArray);
+    numberArray[index] = clickCounter;
+    setNumberArray(numberArray);
+
+    setClickCounter((clickCounter) => clickCounter + 1);
   };
 
   const handleUnselect = (event) => {
-    const movieId = event.target.getAttribute("data-id");
-    const index = event.target.getAttribute("data-index");
-    setCurrentSelectedMovie(
-      currentSelectedMovie.filter((element) => element != index)
-    );
-    setUserAnswerArray(userAnswerArray.filter((element) => element != movieId));
+    setCurrentSelectedMovie([]);
+    setUserAnswerArray([]);
+    setClickCounter(1);
+    setNumberArray(new Array(movieNumber).fill(0));
   };
 
   const submitAnswers = async (event) => {
@@ -77,26 +82,41 @@ export default function Game() {
     if (counter == answerKey.length) {
       setIsPlaying(false);
       setIsWinner(true);
-      const score = generateRandomInteger(2000);
-      // if (counter <= 20) {
-      //   score = Math.ceil(5000 - 41 * counter);
-      // } else if (counter > 20 && counter < 40) {
-      //   score = Math.ceil(4160 * (0.75 * counter * 0.01));
-      // } else if (counter >= 40 && counter <= 60) {
-      //   score = Math.ceil(2943 * (0.75 * counter * 0.01));
-      // } else {
-      //   score = Math.ceil(1618 * (0.5 * counter));
-      // }
+      
+      // Calculates score based on time intervals
+      let score;
 
+      if (seconds <= 20) {
+        score = Math.ceil(5000 - 75 * seconds);
+      } else if (seconds > 20 && seconds <= 40) {
+        score = Math.ceil(3500 - (3500 * (0.009 * seconds)));
+      } else if (seconds > 40 && seconds <= 60) {
+        score = Math.ceil(2240 - (2240 * (0.008 * seconds)));
+      } else if (seconds > 60 && seconds <= 90) {
+        score = Math.ceil(1165 - (1165 * (0.007 * seconds)));
+      } else {
+        score = Math.ceil(431 - (431* (.004 * seconds)));
+      }
+
+      // Save to local storage for highscore screen
+      saveCurrScore(score);
+      saveCurrTime(seconds);
+
+      // Pulls highscore from logged in user,
+      // New score will replace queried highScore if it's greater
       try {
-        const { data } = await saveScore({
-          variables: { highScore: score },
-        });
+        if (data.me.highScore < score){
+          const { data } = await saveScore({
+            variables: { highScore: score },
+          });
+        };
       } catch (err) {
         console.error(err);
       }
 
+      // Directs to Highscore page
       navigate("/highscores", { replace: true }, [navigate]);
+
     } else {
       // Resets posters to how they were before user selects sequence
       setSeed(Math.random());
@@ -105,6 +125,16 @@ export default function Game() {
       return console.log("Try again");
     }
   };
+
+  function compare(a, b) {
+    if (a.release_date < b.release_date) {
+      return -1;
+    }
+    if (a.release_date > b.release_date) {
+      return 1;
+    }
+    return 0;
+  }
 
   const handleStart = async (event) => {
     setIsPlaying(!isPlaying);
@@ -124,26 +154,17 @@ export default function Game() {
       const movieData = movieArr.map((movie) => ({
         movieId: movie.id,
         title: movie.title,
-        release_date: movie.release_date,
+        release_date: new Date(movie.release_date),
         image: `https://www.themoviedb.org/t/p/w1280/${movie.poster_path}`,
       }));
 
-      setRandomMovies(movieData);
-      const sortedArray = _.sortBy(movieData, [movieData.release_date]);
-      setAnswerKey(sortedArray.map((movieData) => movieData.movieId));
+      const deepCopy = _.cloneDeep(movieData);
+      movieData.sort(compare);
+      setRandomMovies(deepCopy);
+      setAnswerKey(movieData.map((movieData) => movieData.movieId));
+      console.log(movieData);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const getImagePath = (i) => {
-    switch (i) {
-      case 0:
-        return seq_0;
-      case 1:
-        return seq_1;
-      default:
-        return seq_2;
     }
   };
 
@@ -178,9 +199,9 @@ export default function Game() {
           }}
           src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
           // src={
-          //   correctAns.indexOf(String(answerKey[i].movieId)) !== -1
+          //   userAnswerArray.indexOf(String(answerKey[i].movieId)) !== -1
           //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-          //     : `https://www.themoviedb.org/t/p/w1280/${answerKey[i].image}`
+          //     : answerKey[i].image
           // }
           alt={`${randomMovies[i].title}`}
           data-id={`${randomMovies[i].movieId}`}
@@ -190,20 +211,29 @@ export default function Game() {
           className="movie-poster"
           onClick={handleSelect}
         />
-        <Image
-          src={getImagePath(i)}
+        <h1
+          id={`overlay${i}`}
           data-index={`${[i]}`}
           data-id={`${randomMovies[i].movieId}`}
           style={{
             borderRadius: "1rem",
             position: "absolute",
-            top: "0",
+            top: "-.5rem",
             left: "0",
+            color: "white",
             opacity: "0.85",
+            width: "100%",
+            height: "100%",
+            backgroundColor: colors[i],
+            textAlign: "center",
+            padding: "50% 0",
+            fontSize: "10rem",
             display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
           }}
           onClick={handleUnselect}
-        ></Image>
+        >
+          {numberArray[i]}
+        </h1>
       </Segment>
     </Grid.Column>
   ));
