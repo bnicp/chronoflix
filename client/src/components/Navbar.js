@@ -10,7 +10,7 @@ export default class Navbar extends Component {
     this.setState({ activeItem: name });
   };
 
-  state = { activeItem: window.location.pathname.substr(1) };
+  state = { activeItem: window.location.pathname.substring(1) };
 
   render() {
     const { activeItem } = this.state;
