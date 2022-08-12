@@ -1,10 +1,6 @@
 import React, { useState, useEffect, componentDidUpdate } from "react";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
-import IMAGES from "../assets/seq_numbers/index";
-import seq_0 from "../assets/seq_numbers/seq_0.jpg";
-import seq_1 from "../assets/seq_numbers/seq_1.jpg";
-import seq_2 from "../assets/seq_numbers/seq_2.jpg";
 import _ from "lodash";
 import { fetchMovies, generateRandomInteger } from "../utils/API";
 import Auth from "../utils/auth";
@@ -21,13 +17,17 @@ export default function Game() {
   const [isWinner, setIsWinner] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [seconds, setSeconds] = useState(0);
-
+  const [clickCounter, setClickCounter] = useState(1);
   const [seed, setSeed] = useState(1);
+  const [numberArray, setNumberArray] = useState(
+    new Array(movieNumber).fill(0)
+  );
 
   const [saveScore, { error }] = useMutation(ADD_SCORE);
 
   const navigate = useNavigate();
   const token = Auth.loggedIn() ? Auth.getToken() : null;
+  const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 
   useEffect(() => {
     let interval;
@@ -46,34 +46,22 @@ export default function Game() {
   }
 
   const handleSelect = (event) => {
+    // these don't matter except for state
     const movieId = event.target.getAttribute("data-id");
     const index = event.target.getAttribute("data-index");
     setCurrentSelectedMovie([...currentSelectedMovie, index]);
-    setUserAnswerArray([...userAnswerArray, movieId], () => {
-      // not hitting the first click because it isn't in state yet so I want to get the first element
-      for (let i = 0; i < userAnswerArray.length; i++) {
-        const currentElement = document.getElementById(userAnswerArray[i]);
-        console.log(currentElement);
-      }
-    });
+    setUserAnswerArray([...userAnswerArray, movieId]);
+    numberArray[index] = clickCounter;
+    setNumberArray(numberArray);
 
-    // console.log(userAnswerArray);
+    setClickCounter((clickCounter) => clickCounter + 1);
   };
 
   const handleUnselect = (event) => {
     setCurrentSelectedMovie([]);
     setUserAnswerArray([]);
-    // for (let i = 0; i < answerKey.length; i++) {
-    //   document.getElementById(`overlay${i}`).style.display = "none";
-    // }
-    // const movieId = event.target.getAttribute("data-id");
-    // const index = event.target.getAttribute("data-index");
-    // setCurrentSelectedMovie(
-    //   currentSelectedMovie.filter((element) => element !== index)
-    // );
-    // setUserAnswerArray(
-    //   userAnswerArray.filter((element) => element !== movieId)
-    // );
+    setClickCounter(1);
+    setNumberArray(new Array(movieNumber).fill(0));
   };
 
   const submitAnswers = async (event) => {
@@ -162,17 +150,6 @@ export default function Game() {
     }
   };
 
-  const getImagePath = (i) => {
-    switch (i) {
-      case 0:
-        return seq_0;
-      case 1:
-        return seq_1;
-      default:
-        return seq_2;
-    }
-  };
-
   const posters = _.times(randomMovies.length, (i) => (
     <Grid.Column
       key={i}
@@ -204,9 +181,9 @@ export default function Game() {
           }}
           src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
           // src={
-          //   correctAns.indexOf(String(answerKey[i].movieId)) !== -1
+          //   userAnswerArray.indexOf(String(answerKey[i].movieId)) !== -1
           //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-          //     : `https://www.themoviedb.org/t/p/w1280/${answerKey[i].image}`
+          //     : answerKey[i].image
           // }
           alt={`${randomMovies[i].title}`}
           data-id={`${randomMovies[i].movieId}`}
@@ -216,21 +193,29 @@ export default function Game() {
           className="movie-poster"
           onClick={handleSelect}
         />
-        <Image
+        <h1
           id={`overlay${i}`}
-          src={getImagePath(i)}
           data-index={`${[i]}`}
           data-id={`${randomMovies[i].movieId}`}
           style={{
             borderRadius: "1rem",
             position: "absolute",
-            top: "0",
+            top: "-.5rem",
             left: "0",
+            color: "white",
             opacity: "0.85",
+            width: "100%",
+            height: "100%",
+            backgroundColor: colors[i],
+            textAlign: "center",
+            padding: "50% 0",
+            fontSize: "10rem",
             display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
           }}
           onClick={handleUnselect}
-        ></Image>
+        >
+          {numberArray[i]}
+        </h1>
       </Segment>
     </Grid.Column>
   ));
