@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Button, Segment } from "semantic-ui-react";
+import { Grid, Button } from "semantic-ui-react";
 import { PinkButton, YellowButton } from "./styledComponents";
 
 const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];

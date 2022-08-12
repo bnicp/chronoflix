@@ -106,19 +106,10 @@ h1 {
   max-width: 80%;
 }
 
-/* #nav-logo {
-  position: absolute;
-  top: 1.5rem;
-  left: 2rem;
-} */
-
 .logo {
   margin-top: 4rem;
 }
 
-/* .twelve.wide.column {
-  float: right;
-} */
 .nodisplay {
   display: none;
 }
