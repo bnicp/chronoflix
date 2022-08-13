@@ -176,11 +176,7 @@ export default function Game() {
   };
 
   const posters = _.times(randomMovies.length, (i) => (
-    <Grid.Column
-      key={i}
-      max={randomMovies.length}
-      style={{ margin: "1rem 0" }}
-    >
+    <Grid.Column key={i} max={randomMovies.length} style={{ margin: "1rem 0" }}>
       <Segment
         id={`poster${i}`}
         data-id={`${randomMovies[i].movieId}`}
@@ -247,16 +243,23 @@ export default function Game() {
 
   return (
     <div id="game-screen">
-     <Grid centered style={{ margin: "0 2rem" }}>
-      <Grid.Row style={{ margin: "2rem 1.5rem 1rem 1.5rem", color: "white", fontSize: "1.5rem" }} only="tablet computer">
-        Click the poster images to place the movies in order by release year.
-      </Grid.Row>
-      <Grid.Row style={{ color: "white", fontSize: "1rem" }} only="mobile">
-        Click the poster images to place the movies in order by release year.
-      </Grid.Row>
-      {/* </Grid> */}
-      {/* is seed necessary for the key? */}
-      {/* <Grid centered style={{ margin: "0 2rem 4rem 2rem" }}> */}
+      <Grid centered style={{ margin: "0 2rem" }}>
+        <Grid.Row
+          style={{
+            margin: "2rem 1.5rem 1rem 1.5rem",
+            color: "white",
+            fontSize: "1.5rem",
+          }}
+          only="tablet computer"
+        >
+          Click the poster images to place the movies in order by release year.
+        </Grid.Row>
+        <Grid.Row style={{ color: "white", fontSize: "1rem" }} only="mobile">
+          Click the poster images to place the movies in order by release year.
+        </Grid.Row>
+        {/* </Grid> */}
+        {/* is seed necessary for the key? */}
+        {/* <Grid centered style={{ margin: "0 2rem 4rem 2rem" }}> */}
         <Grid.Row columns={2} only="mobile tablet">
           {posters}
         </Grid.Row>
@@ -264,15 +267,31 @@ export default function Game() {
           {posters}
         </Grid.Row>
 
-      <Grid.Row className="timer" style={{color:"white"}} only="computer tablet">
-        TIME ELAPSED: {parseInt(seconds / 60)}:
-        {String(seconds % 60).length == 1 ? "0" + (seconds % 60) : seconds % 60}
-      </Grid.Row>
-      <Grid.Row className="timer" style={{color:"white", fontSize:"1rem"}} only="mobile">
-        TIME ELAPSED: {parseInt(seconds / 60)}:
-        {String(seconds % 60).length == 1 ? "0" + (seconds % 60) : seconds % 60}
-      </Grid.Row>
+        <Grid.Row
+          className="timer"
+          style={{ color: "white" }}
+          only="computer tablet"
+        >
+          TIME ELAPSED: {parseInt(seconds / 60)}:
+          {String(seconds % 60).length == 1
+            ? "0" + (seconds % 60)
+            : seconds % 60}
+        </Grid.Row>
+        <Grid.Row
+          className="timer"
+          style={{ color: "white", fontSize: "1rem" }}
+          only="mobile"
+        >
+          TIME ELAPSED: {parseInt(seconds / 60)}:
+          {String(seconds % 60).length == 1
+            ? "0" + (seconds % 60)
+            : seconds % 60}
+        </Grid.Row>
       </Grid>
+      <div className="timer">
+        TIME ELAPSED: {parseInt(seconds / 60)}:
+        {String(seconds % 60).length == 1 ? "0" + (seconds % 60) : seconds % 60}
+      </div>
 
       {isPlaying ? (
         <></>

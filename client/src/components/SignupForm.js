@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Form, FormGroup } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import { PinkButton } from "./styledComponents";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -12,10 +12,6 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
-  // set state for form validation
-  const [validated] = useState(false);
-  // set state for alert
-  const [showAlert, setShowAlert] = useState(false);
   const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
@@ -36,11 +32,10 @@ const SignupForm = () => {
       if (!response.data.addUser) {
         throw new Error("something went wrong!");
       }
-      const { token, user } = response.data.addUser;
+      const { token } = response.data.addUser;
       Auth.login(token);
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
     }
     setUserFormData({
       username: "",

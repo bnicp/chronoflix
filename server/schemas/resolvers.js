@@ -12,7 +12,9 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     allUsers: async (parent, args) => {
-      const highscoreData = await User.find({}).sort([['highScore', 'descending']]);
+      const highscoreData = await User.find({})
+        .sort([["highScore", "descending"]])
+        .limit(5);
       return highscoreData;
     },
   },
@@ -49,8 +51,17 @@ const resolvers = {
         );
         return updatedUser;
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
+
+    removeUser: async (parent, { _id }, context) => {
+      
+          const userToRemove = await User.findOneAndDelete(
+            { _id: context.user._id })
+          return userToRemove; 
+      
+      // throw new AuthenticationError('You are not logged in!')
+  },
   },
 };
 

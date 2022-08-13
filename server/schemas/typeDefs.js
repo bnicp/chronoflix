@@ -22,6 +22,7 @@ const typeDefs = gql`
     loginUser(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     newScore(highScore: Int!): User
+    removeUser(_id: ID!): User
   }
 `;
 
