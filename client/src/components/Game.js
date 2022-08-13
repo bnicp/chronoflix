@@ -201,11 +201,6 @@ export default function Game() {
             left: "0",
           }}
           src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
-          // src={
-          //   userAnswerArray.indexOf(String(answerKey[i].movieId)) !== -1
-          //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-          //     : answerKey[i].image
-          // }
           alt={`${randomMovies[i].title}`}
           data-id={`${randomMovies[i].movieId}`}
           id={`${randomMovies[i].movieId}`}
@@ -288,10 +283,6 @@ export default function Game() {
             : seconds % 60}
         </Grid.Row>
       </Grid>
-      <div className="timer">
-        TIME ELAPSED: {parseInt(seconds / 60)}:
-        {String(seconds % 60).length == 1 ? "0" + (seconds % 60) : seconds % 60}
-      </div>
 
       {isPlaying ? (
         <></>
