@@ -11,7 +11,7 @@ import { GET_ME } from "../utils/queries";
 import { saveCurrScore, saveCurrTime } from "../utils/localStorage";
 
 export default function Game() {
-  const movieNumber = 3;
+  const movieNumber = 4;
   const [randomMovies, setRandomMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswerArray, setUserAnswerArray] = useState([]);
@@ -176,11 +176,7 @@ export default function Game() {
   };
 
   const posters = _.times(randomMovies.length, (i) => (
-    <Grid.Column
-      key={i}
-      max={randomMovies.length}
-      style={{ margin: "1rem 0 1rem 0" }}
-    >
+    <Grid.Column key={i} max={randomMovies.length} style={{ margin: "1rem 0" }}>
       <Segment
         id={`poster${i}`}
         data-id={`${randomMovies[i].movieId}`}
@@ -225,16 +221,16 @@ export default function Game() {
           style={{
             borderRadius: "1rem",
             position: "absolute",
-            top: "-.5rem",
-            left: "0",
+            top: "-1.1rem",
+            left: "-0.1rem",
             color: "white",
-            opacity: "0.85",
-            width: "100%",
-            height: "100%",
+            opacity: "0.90",
+            width: "104%",
+            height: "104%",
             backgroundColor: colors[i],
             textAlign: "center",
-            padding: "50% 0",
-            fontSize: "10rem",
+            padding: "20% 12%",
+            fontSize: "8rem",
             display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
           }}
           onClick={handleUnselect}
@@ -247,16 +243,49 @@ export default function Game() {
 
   return (
     <div id="game-screen">
-      <div id="instructions">
-        Click the poster images to place the movies in order by release year.
-      </div>
-      {/* is seed necessary for the key? */}
-      <Grid centered style={{ marginBottom: "4rem" }}>
-        <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
+      <Grid centered style={{ margin: "0 2rem" }}>
+        <Grid.Row
+          style={{
+            margin: "2rem 1.5rem 1rem 1.5rem",
+            color: "white",
+            fontSize: "1.5rem",
+          }}
+          only="tablet computer"
+        >
+          Click the poster images to place the movies in order by release year.
+        </Grid.Row>
+        <Grid.Row style={{ color: "white", fontSize: "1rem" }} only="mobile">
+          Click the poster images to place the movies in order by release year.
+        </Grid.Row>
+        {/* </Grid> */}
+        {/* is seed necessary for the key? */}
+        {/* <Grid centered style={{ margin: "0 2rem 4rem 2rem" }}> */}
+        <Grid.Row columns={2} only="mobile tablet">
           {posters}
         </Grid.Row>
-        <Grid.Row columns={movieNumber * 2} only="computer">
+        <Grid.Row columns={movieNumber} only="computer">
           {posters}
+        </Grid.Row>
+
+        <Grid.Row
+          className="timer"
+          style={{ color: "white" }}
+          only="computer tablet"
+        >
+          TIME ELAPSED: {parseInt(seconds / 60)}:
+          {String(seconds % 60).length == 1
+            ? "0" + (seconds % 60)
+            : seconds % 60}
+        </Grid.Row>
+        <Grid.Row
+          className="timer"
+          style={{ color: "white", fontSize: "1rem" }}
+          only="mobile"
+        >
+          TIME ELAPSED: {parseInt(seconds / 60)}:
+          {String(seconds % 60).length == 1
+            ? "0" + (seconds % 60)
+            : seconds % 60}
         </Grid.Row>
       </Grid>
       <div className="timer">

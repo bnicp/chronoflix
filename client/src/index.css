@@ -60,23 +60,24 @@ h1 {
   font-size: 3.5rem;
 }
 
-#instructions {
-  margin: 2rem 0 2rem 0;
+/* #instructions {
+  margin: 2rem 1.5rem 1rem 1.5rem;
   color: white;
-}
+  font-size: 1.5rem;
+} */
 
 .movie-poster {
   width: 100%;
 }
 
 .movies-container {
-  margin-bottom: 4rem;
+  margin: 4rem;
 }
-
+/* 
 .timer {
   color: white;
   margin-bottom: 3rem;
-}
+} */
 
 #start-button {
   background-color: var(--light-blue);
@@ -95,14 +96,11 @@ h1 {
 }
 
 /* high score screen */
-.heading {
-  margin-bottom: 4rem;
-}
 
-#all,
+/* #all,
 #one {
   max-width: 80%;
-}
+} */
 
 .logo {
   margin-top: 4rem;
