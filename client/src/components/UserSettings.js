@@ -5,6 +5,7 @@ import Auth from "../utils/auth";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { DELETE_USER } from "../utils/mutations";
+import AuthService from "../utils/auth";
 
 const UserSettings = () => {
   const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -13,18 +14,19 @@ const UserSettings = () => {
   const navigate = useNavigate();
 
   if (!token) {
-    return <div id="instructions">You must be logged in.</div>};
+    return <div id="instructions">You must be logged in.</div>;
+  }
 
   const deleteUser = async () => {
-
-  try {const { data } = await deleteMu({
-    variables: { _id: Auth.getProfile().data._id }
-      })
-    }catch (err){
+    try {
+      const { data } = await deleteMu({
+        variables: { _id: Auth.getProfile().data._id },
+      });
+    } catch (err) {
       console.err(err);
     }
-  navigate("/signup", { replace: true }, [navigate]);
-
+    AuthService.logout();
+    navigate("/signup", { replace: true }, [navigate]);
   };
 
   return (
