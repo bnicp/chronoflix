@@ -34,3 +34,12 @@ export const ADD_SCORE = gql`
     }
   }
 `;
+
+export const DELETE_USER = gql`
+  mutation removeUser($_id: ID!) {
+    removeUser(_id: $_id) 
+    {
+        username
+    }
+  }
+`;
