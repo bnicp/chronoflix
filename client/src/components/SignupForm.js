@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Form } from "semantic-ui-react";
+import { Form, Label } from "semantic-ui-react";
 import { PinkButton } from "./styledComponents";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -76,6 +76,9 @@ const SignupForm = () => {
           />
         </Form.Field>
       </Form.Group>
+      <Form.Field>
+      <Label pointing>Username must be between 3-8 characters.</Label>
+      </Form.Field>
       <Form.Group>
         <Form.Field>
           <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
@@ -90,6 +93,9 @@ const SignupForm = () => {
           />
         </Form.Field>
       </Form.Group>
+      <Form.Field>
+      <Label pointing>Password must be a minimum of 8 characters.</Label>
+      </Form.Field>
       <PinkButton
         type="submit"
         disabled={
