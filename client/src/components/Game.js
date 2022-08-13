@@ -11,7 +11,7 @@ import { GET_ME } from "../utils/queries";
 import { saveCurrScore, saveCurrTime } from "../utils/localStorage";
 
 export default function Game() {
-  const movieNumber = 3;
+  const movieNumber = 4;
   const [randomMovies, setRandomMovies] = useState([]);
   const [answerKey, setAnswerKey] = useState([]);
   const [userAnswerArray, setUserAnswerArray] = useState([]);
@@ -210,11 +210,6 @@ export default function Game() {
             left: "0",
           }}
           src={`https://www.themoviedb.org/t/p/w1280/${randomMovies[i].image}`}
-          // src={
-          //   userAnswerArray.indexOf(String(answerKey[i].movieId)) !== -1
-          //     ? `https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/2324px-Banana-Single.jpg`
-          //     : answerKey[i].image
-          // }
           alt={`${randomMovies[i].title}`}
           data-id={`${randomMovies[i].movieId}`}
           id={`${randomMovies[i].movieId}`}
@@ -238,7 +233,7 @@ export default function Game() {
             height: "100%",
             backgroundColor: colors[i],
             textAlign: "center",
-            padding: "50% 0",
+            // padding: "50% 0",
             fontSize: "10rem",
             display: currentSelectedMovie.includes(`${i}`) ? "block" : "none",
           }}
@@ -253,11 +248,11 @@ export default function Game() {
   return (
     <div id="game-screen">
       <div id="instructions">
-        Click the poster images to place the movies in order by release year.
+        Click to label the movies in order by release year.
       </div>
       {/* is seed necessary for the key? */}
       <Grid centered style={{ marginBottom: "4rem" }}>
-        <Grid.Row columns={1} only="mobile tablet" style={{ maxWidth: "80%" }}>
+        <Grid.Row columns={2} only="mobile tablet" style={{ maxWidth: "80%" }}>
           {posters}
         </Grid.Row>
         <Grid.Row columns={movieNumber * 2} only="computer">
