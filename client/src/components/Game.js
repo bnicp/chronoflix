@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_SCORE } from "../utils/mutations";
 import { GET_ME } from "../utils/queries";
 import { saveCurrScore, saveCurrTime } from "../utils/localStorage";
+import { scoreCalc } from "../utils/score"
 
 export default function Game() {
   const movieNumber = 4;
@@ -90,19 +91,7 @@ export default function Game() {
       setIsPlaying(false);
 
       // Calculates score based on time intervals
-      let score;
-
-      if (seconds <= 20) {
-        score = Math.ceil(5000 - 75 * seconds);
-      } else if (seconds > 20 && seconds <= 40) {
-        score = Math.ceil(3500 - 3500 * (0.009 * seconds));
-      } else if (seconds > 40 && seconds <= 60) {
-        score = Math.ceil(2240 - 2240 * (0.008 * seconds));
-      } else if (seconds > 60 && seconds <= 90) {
-        score = Math.ceil(1165 - 1165 * (0.007 * seconds));
-      } else {
-        score = Math.ceil(431 - 431 * (0.004 * seconds));
-      }
+      const score = scoreCalc(seconds);
 
       // Save to local storage for highscore screen
       saveCurrScore(score);
