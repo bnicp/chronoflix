@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Form, Label } from "semantic-ui-react";
+import { Form, Label, Message } from "semantic-ui-react";
 import { PinkButton } from "./styledComponents";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -17,6 +17,7 @@ const SignupForm = () => {
   const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
+    document.getElementById("form").classList.remove("error");
     const { name, value } = event.target;
 
     if (name === "username") {
@@ -54,6 +55,7 @@ const SignupForm = () => {
       const { token } = response.data.addUser;
       Auth.login(token);
     } catch (err) {
+      document.getElementById("form").classList.add("error");
       console.error(err);
     }
     setUserFormData({
@@ -64,7 +66,7 @@ const SignupForm = () => {
   };
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form id="form" onSubmit={handleFormSubmit}>
       <Form.Group>
         <Form.Field>
           <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
@@ -127,6 +129,12 @@ const SignupForm = () => {
           </Label>
         </Form.Field>
       )}
+      <Message
+        error
+        header="Login Invalid"
+        content="Username or password could not be found."
+        style={{ fontSize: "18px", margin: "2.5em 15em 0 15em" }}
+      />
       <PinkButton
         type="submit"
         disabled={
