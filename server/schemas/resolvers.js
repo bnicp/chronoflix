@@ -29,13 +29,13 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError("No user found");
+        return "Can't find this user";
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
+        return "Incorrect password.";
       }
 
       const token = signToken(user);
@@ -55,13 +55,13 @@ const resolvers = {
     },
 
     removeUser: async (parent, { _id }, context) => {
-      
-          const userToRemove = await User.findOneAndDelete(
-            { _id: context.user._id })
-          return userToRemove; 
-      
+      const userToRemove = await User.findOneAndDelete({
+        _id: context.user._id,
+      });
+      return userToRemove;
+
       // throw new AuthenticationError('You are not logged in!')
-  },
+    },
   },
 };
 
