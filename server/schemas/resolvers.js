@@ -51,6 +51,15 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+
+    removeUser: async (parent, { _id }, context) => {
+      
+          const userToRemove = await User.findOneAndDelete(
+            { _id: context.user._id })
+          return userToRemove; 
+      
+      // throw new AuthenticationError('You are not logged in!')
+  },
   },
 };
 
