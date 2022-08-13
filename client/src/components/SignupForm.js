@@ -12,16 +12,35 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
+  const [validUserName, setValidUserName] = useState(true);
+  const [validPassword, setValidPassword] = useState(true);
   const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === "username") {
+      if (value.length <= 8 && value.length >= 3) {
+        setValidUserName(true);
+      } else {
+        setValidUserName(false);
+      }
+    }
+
+    if (name === "password") {
+      if (value.length >= 8) {
+        setValidPassword(true);
+      } else {
+        setValidPassword(false);
+      }
+    }
+
     setUserFormData({ ...userFormData, [name]: value });
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // check if form has everything (as per react-bootstrap docs)
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -76,9 +95,15 @@ const SignupForm = () => {
           />
         </Form.Field>
       </Form.Group>
-      <Form.Field>
-      <Label pointing>Username must be between 3-8 characters.</Label>
-      </Form.Field>
+      {validUserName ? (
+        <></>
+      ) : (
+        <Form.Field>
+          <Label pointing prompt>
+            Username must be between 3-8 characters.
+          </Label>
+        </Form.Field>
+      )}
       <Form.Group>
         <Form.Field>
           <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
@@ -93,9 +118,15 @@ const SignupForm = () => {
           />
         </Form.Field>
       </Form.Group>
-      <Form.Field>
-      <Label pointing>Password must be a minimum of 8 characters.</Label>
-      </Form.Field>
+      {validPassword ? (
+        <></>
+      ) : (
+        <Form.Field>
+          <Label pointing prompt>
+            Password must be a minimum of 8 characters.
+          </Label>
+        </Form.Field>
+      )}
       <PinkButton
         type="submit"
         disabled={
