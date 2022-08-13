@@ -39,9 +39,7 @@ const HighScores = () => {
         <h3 style={{ color: "white", margin: "2rem 0" }}>HIGH SCORES</h3>
       </div>
       <Grid
-        textAlign="center"
         columns="equal"
-        centered
         className="universal-scores"
         style={{ margin: "0 0 2rem 5%", fontSize: "1rem" }}
       >
