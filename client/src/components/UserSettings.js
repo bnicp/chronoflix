@@ -26,7 +26,6 @@ const UserSettings = () => {
       console.err(err);
     }
     AuthService.logout();
-    navigate("/signup", { replace: true }, [navigate]);
   };
 
   return (
@@ -35,11 +34,16 @@ const UserSettings = () => {
         <>
           <h1>SETTINGS</h1>
           <h2>Username: {data.me.username}</h2>
-          <h2>Current High Score: {data.me.highScore}</h2>
+          {data.me.highScore ? (
+            <h2>Current High Score: {data.me.highScore}</h2>
+          ) : (
+            <></>
+          )}
+
           <PinkButton onClick={deleteUser}>DELETE ACCOUNT</PinkButton>
         </>
       ) : (
-        <>waiting</>
+        <></>
       )}
     </div>
   );
