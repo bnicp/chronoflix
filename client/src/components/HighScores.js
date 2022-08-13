@@ -15,13 +15,19 @@ const HighScores = () => {
   // Populates highscores with data from allUsers query
   const getScores = (scoreData) => {
     if (!loading) {
-      const scores = colors.map((color, i) => (
-        <Grid.Row style={{ color: `${color}` }} key={color}>
-          <Grid.Column width={4}>{i + 1}</Grid.Column>
-          <Grid.Column width={7}>{scoreData.allUsers[i].username}</Grid.Column>
-          <Grid.Column>{scoreData.allUsers[i].highScore}</Grid.Column>
-        </Grid.Row>
-      ));
+      const scores = colors.map((color, i) => {
+        if (scoreData.allUsers[i].highScore !== null) {
+          return (
+            <Grid.Row style={{ color: `${color}` }} key={color}>
+              <Grid.Column width={4}>{i + 1}</Grid.Column>
+              <Grid.Column width={7}>
+                {scoreData.allUsers[i].username}
+              </Grid.Column>
+              <Grid.Column>{scoreData.allUsers[i].highScore}</Grid.Column>
+            </Grid.Row>
+          );
+        }
+      });
 
       return scores;
     }
