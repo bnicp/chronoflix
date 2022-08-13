@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form } from "semantic-ui-react";
+import { Form, Message } from "semantic-ui-react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -7,11 +7,10 @@ import { PinkButton } from "./styledComponents";
 
 const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
-  // const [validated] = useState(false);
-  // const [showAlert, setShowAlert] = useState(false);
   const [loginUser, { error }] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
+    document.getElementById("form").classList.remove("error");
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
@@ -19,25 +18,20 @@ const LoginForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    // }
-
     try {
       const response = await loginUser({ variables: { ...userFormData } });
 
       if (!response.data.loginUser) {
+        console.log(response);
         throw new Error("something went wrong!");
       }
 
       const { token, user } = await response.data.loginUser;
-      console.log(user);
+
       Auth.login(token);
     } catch (err) {
+      document.getElementById("form").classList.add("error");
       console.error(err);
-      // setShowAlert(true);
     }
 
     setUserFormData({
@@ -48,7 +42,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form id="form" onSubmit={handleFormSubmit}>
       <Form.Group>
         <Form.Field>
           <label style={{ color: "white", fontSize: "18px", marginTop: "1em" }}>
@@ -81,8 +75,15 @@ const LoginForm = () => {
           />
         </Form.Field>
       </Form.Group>
+      <Message
+        error
+        header="Login Invalid"
+        content="Username or password could not be found."
+        style={{ fontSize: "18px", margin: "2.5em 15em 0 15em" }}
+      />
       <PinkButton
         type="submit"
+        style={{ marginTop: "1em" }}
         disabled={!(userFormData.email && userFormData.password)}
       >
         SUBMIT
