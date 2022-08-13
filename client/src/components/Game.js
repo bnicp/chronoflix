@@ -100,17 +100,19 @@ export default function Game() {
       // Pulls highscore from logged in user,
       // New score will replace queried highScore if it's greater
       try {
-        if (data.me.highScore < score) {
+        if (score > data.me.highScore) {
           const { data } = await saveScore({
             variables: { highScore: score },
           });
         }
+        console.log("1st" + data.me.highScore)
       } catch (err) {
         console.error(err);
       }
 
-      // Directs to Highscore page
       navigate("/highscores", { replace: true }, [navigate]);
+
+      
     } else {
       // Reloads posters to how they were before user selects sequence
       setSeed(Math.random());

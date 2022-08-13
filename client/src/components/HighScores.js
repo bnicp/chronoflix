@@ -11,6 +11,7 @@ const colors = ["#de077d", "#fe6c2b", "#fcb42c", "#2786eb", "#6a0ba8"];
 const HighScores = () => {
   // Query to get allUsers to display highscores, this is sorted in desc order in the resolver
   const { loading, data } = useQuery(GET_ALLUSERS);
+  console.log(data);
 
   // Populates highscores with data from allUsers query
   const getScores = (scoreData) => {
